@@ -1,11 +1,16 @@
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Razor;
+#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Collections.Extensions;
 using Abp.Extensions;
 using Abp.Timing;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace AbpCompanyName.AbpProjectName.Web.Resources
 {
@@ -36,7 +41,7 @@ namespace AbpCompanyName.AbpProjectName.Web.Resources
             {
                 foreach (var scriptUrl in _scriptUrls)
                 {
-                    await writer.WriteAsync($"<script src=\"{scriptUrl}?v=" + Clock.Now.Ticks + "\"></script>");
+                    await writer.WriteAsync($"<script src=\"{scriptUrl}?v={Clock.Now.Ticks}\"></script>");
                 }
             });
         }
@@ -48,12 +53,9 @@ namespace AbpCompanyName.AbpProjectName.Web.Resources
                 return url;
             }
 
-            if (url.EndsWith(".min." + ext))
-            {
-                return url;
-            }
-
-            return url.Left(url.Length - ext.Length) + "min." + ext;
+            return url.EndsWith($".min.{ext}", StringComparison.OrdinalIgnoreCase)
+                ? url
+                : $"{url.Left(url.Length - ext.Length)}min.{ext}";
         }
     }
 }

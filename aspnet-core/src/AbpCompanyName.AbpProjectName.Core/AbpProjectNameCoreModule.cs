@@ -1,4 +1,8 @@
-﻿using Abp.Localization;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
+using Abp.Localization;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Runtime.Security;
@@ -35,21 +39,15 @@ namespace AbpCompanyName.AbpProjectName
             AppRoleConfig.Configure(Configuration.Modules.Zero().RoleManagement);
 
             Configuration.Settings.Providers.Add<AppSettingProvider>();
-            
+
             Configuration.Localization.Languages.Add(new LanguageInfo("fa", "فارسی", "famfamfam-flags ir"));
-            
+
             Configuration.Settings.SettingEncryptionConfiguration.DefaultPassPhrase = AbpProjectNameConsts.DefaultPassPhrase;
             SimpleStringCipher.DefaultPassPhrase = AbpProjectNameConsts.DefaultPassPhrase;
         }
 
-        public override void Initialize()
-        {
-            IocManager.RegisterAssemblyByConvention(typeof(AbpProjectNameCoreModule).GetAssembly());
-        }
+        public override void Initialize() => IocManager.RegisterAssemblyByConvention(typeof(AbpProjectNameCoreModule).GetAssembly());
 
-        public override void PostInitialize()
-        {
-            IocManager.Resolve<AppTimes>().StartupTime = Clock.Now;
-        }
+        public override void PostInitialize() => IocManager.Resolve<AppTimes>().StartupTime = Clock.Now;
     }
 }

@@ -1,15 +1,19 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Application.Services.Dto;
 using Abp.AspNetCore.Mvc.Authorization;
 using AbpCompanyName.AbpProjectName.Authorization;
 using AbpCompanyName.AbpProjectName.Controllers;
 using AbpCompanyName.AbpProjectName.Users;
 using AbpCompanyName.AbpProjectName.Web.Models.Users;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.Web.Controllers
 {
-    [AbpMvcAuthorize(PermissionNames.Pages_Users)]
+    [AbpMvcAuthorize(PermissionNames.PagesUsers)]
     public class UsersController : AbpProjectNameControllerBase
     {
         private readonly IUserAppService _userAppService;
@@ -41,9 +45,6 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
             return PartialView("_EditModal", model);
         }
 
-        public ActionResult ChangePassword()
-        {
-            return View();
-        }
+        public ActionResult ChangePassword() => View();
     }
 }

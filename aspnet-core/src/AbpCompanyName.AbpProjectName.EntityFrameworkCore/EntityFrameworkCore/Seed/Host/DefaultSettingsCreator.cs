@@ -1,9 +1,13 @@
-﻿using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Configuration;
 using Abp.Localization;
 using Abp.MultiTenancy;
 using Abp.Net.Mail;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
 {
@@ -11,19 +15,14 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
     {
         private readonly AbpProjectNameDbContext _context;
 
-        public DefaultSettingsCreator(AbpProjectNameDbContext context)
-        {
+        public DefaultSettingsCreator(AbpProjectNameDbContext context) =>
             _context = context;
-        }
 
         public void Create()
         {
-            int? tenantId = null;
-
-            if (AbpProjectNameConsts.MultiTenancyEnabled == false)
-            {
-                tenantId = MultiTenancyConsts.DefaultTenantId;
-            }
+            int? tenantId = AbpProjectNameConsts.MultiTenancyEnabled
+                ? null
+                : MultiTenancyConsts.DefaultTenantId;
 
             // Emailing
             AddSettingIfNotExists(EmailSettingNames.DefaultFromAddress, "admin@mydomain.com", tenantId);

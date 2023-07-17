@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Authorization.Users;
 using Abp.Domain.Services;
 using Abp.IdentityFramework;
@@ -11,16 +9,22 @@ using Abp.Runtime.Session;
 using Abp.UI;
 using AbpCompanyName.AbpProjectName.Authorization.Roles;
 using AbpCompanyName.AbpProjectName.MultiTenancy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.Authorization.Users
 {
     public class UserRegistrationManager : DomainService
     {
-        public IAbpSession AbpSession { get; set; }
-
         private readonly TenantManager _tenantManager;
         private readonly UserManager _userManager;
         private readonly RoleManager _roleManager;
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Initial framework.")]
         private readonly IPasswordHasher<User> _passwordHasher;
 
         public UserRegistrationManager(
@@ -36,6 +40,8 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Users
 
             AbpSession = NullAbpSession.Instance;
         }
+
+        public IAbpSession AbpSession { get; set; }
 
         public async Task<User> RegisterAsync(string name, string surname, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed)
         {
@@ -56,7 +62,7 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Users
             };
 
             user.SetNormalizedNames();
-           
+
             foreach (var defaultRole in await _roleManager.Roles.Where(r => r.IsDefault).ToListAsync())
             {
                 user.Roles.Add(new UserRole(tenant.Id, user.Id, defaultRole.Id));
@@ -70,6 +76,9 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Users
             return user;
         }
 
+        protected virtual void CheckErrors(IdentityResult identityResult) =>
+            identityResult.CheckErrors(LocalizationManager);
+
         private void CheckForTenant()
         {
             if (!AbpSession.TenantId.HasValue)
@@ -78,35 +87,19 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Users
             }
         }
 
-        private async Task<Tenant> GetActiveTenantAsync()
-        {
-            if (!AbpSession.TenantId.HasValue)
-            {
-                return null;
-            }
-
-            return await GetActiveTenantAsync(AbpSession.TenantId.Value);
-        }
+        private async Task<Tenant> GetActiveTenantAsync() =>
+            !AbpSession.TenantId.HasValue
+            ? null
+            : await GetActiveTenantAsync(AbpSession.TenantId.Value);
 
         private async Task<Tenant> GetActiveTenantAsync(int tenantId)
         {
-            var tenant = await _tenantManager.FindByIdAsync(tenantId);
-            if (tenant == null)
-            {
-                throw new UserFriendlyException(L("UnknownTenantId{0}", tenantId));
-            }
+            var tenant = await _tenantManager.FindByIdAsync(tenantId)
+                ?? throw new UserFriendlyException(L("UnknownTenantId{0}", tenantId));
 
-            if (!tenant.IsActive)
-            {
-                throw new UserFriendlyException(L("TenantIdIsNotActive{0}", tenantId));
-            }
-
-            return tenant;
-        }
-
-        protected virtual void CheckErrors(IdentityResult identityResult)
-        {
-            identityResult.CheckErrors(LocalizationManager);
+            return !tenant.IsActive
+                ? throw new UserFriendlyException(L("TenantIdIsNotActive{0}", tenantId))
+                : tenant;
         }
     }
 }

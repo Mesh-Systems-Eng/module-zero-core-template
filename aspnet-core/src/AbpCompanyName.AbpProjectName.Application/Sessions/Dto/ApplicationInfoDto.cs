@@ -1,4 +1,7 @@
-﻿using System;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+
+using System;
 using System.Collections.Generic;
 
 namespace AbpCompanyName.AbpProjectName.Sessions.Dto

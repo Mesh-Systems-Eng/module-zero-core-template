@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
@@ -14,10 +15,13 @@ using AbpCompanyName.AbpProjectName.Authorization.Users;
 using AbpCompanyName.AbpProjectName.Roles.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.Roles
 {
-    [AbpAuthorize(PermissionNames.Pages_Roles)]
+    [AbpAuthorize(PermissionNames.PagesRoles)]
     public class RoleAppService : AsyncCrudAppService<Role, RoleDto, int, PagedRoleResultRequestDto, CreateRoleDto, RoleDto>, IRoleAppService
     {
         private readonly RoleManager _roleManager;
@@ -55,8 +59,7 @@ namespace AbpCompanyName.AbpProjectName.Roles
                 .Roles
                 .WhereIf(
                     !input.Permission.IsNullOrWhiteSpace(),
-                    r => r.Permissions.Any(rp => rp.Name == input.Permission && rp.IsGranted)
-                )
+                    r => r.Permissions.Any(rp => rp.Name == input.Permission && rp.IsGranted))
                 .ToListAsync();
 
             return new ListResultDto<RoleListDto>(ObjectMapper.Map<List<RoleListDto>>(roles));
@@ -86,7 +89,7 @@ namespace AbpCompanyName.AbpProjectName.Roles
         {
             CheckDeletePermission();
 
-            var role = await _roleManager.FindByIdAsync(input.Id.ToString());
+            var role = await _roleManager.FindByIdAsync($"{input.Id}");
             var users = await _userManager.GetUsersInRoleAsync(role.NormalizedName);
 
             foreach (var user in users)
@@ -102,31 +105,7 @@ namespace AbpCompanyName.AbpProjectName.Roles
             var permissions = PermissionManager.GetAllPermissions();
 
             return Task.FromResult(new ListResultDto<PermissionDto>(
-                ObjectMapper.Map<List<PermissionDto>>(permissions).OrderBy(p => p.DisplayName).ToList()
-            ));
-        }
-
-        protected override IQueryable<Role> CreateFilteredQuery(PagedRoleResultRequestDto input)
-        {
-            return Repository.GetAllIncluding(x => x.Permissions)
-                .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Keyword)
-                || x.DisplayName.Contains(input.Keyword)
-                || x.Description.Contains(input.Keyword));
-        }
-
-        protected override async Task<Role> GetEntityByIdAsync(int id)
-        {
-            return await Repository.GetAllIncluding(x => x.Permissions).FirstOrDefaultAsync(x => x.Id == id);
-        }
-
-        protected override IQueryable<Role> ApplySorting(IQueryable<Role> query, PagedRoleResultRequestDto input)
-        {
-            return query.OrderBy(r => r.DisplayName);
-        }
-
-        protected virtual void CheckErrors(IdentityResult identityResult)
-        {
-            identityResult.CheckErrors(LocalizationManager);
+                ObjectMapper.Map<List<PermissionDto>>(permissions).OrderBy(p => p.DisplayName).ToList()));
         }
 
         public async Task<GetRoleForEditOutput> GetRoleForEdit(EntityDto input)
@@ -143,6 +122,20 @@ namespace AbpCompanyName.AbpProjectName.Roles
                 GrantedPermissionNames = grantedPermissions.Select(p => p.Name).ToList()
             };
         }
+
+        protected override IQueryable<Role> CreateFilteredQuery(PagedRoleResultRequestDto input) =>
+            Repository.GetAllIncluding(x => x.Permissions)
+            .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Keyword)
+            || x.DisplayName.Contains(input.Keyword)
+            || x.Description.Contains(input.Keyword));
+
+        protected override async Task<Role> GetEntityByIdAsync(int id) =>
+            await Repository.GetAllIncluding(x => x.Permissions).FirstOrDefaultAsync(x => x.Id == id);
+
+        protected override IQueryable<Role> ApplySorting(IQueryable<Role> query, PagedRoleResultRequestDto input) =>
+            query.OrderBy(r => r.DisplayName);
+
+        protected virtual void CheckErrors(IdentityResult identityResult) =>
+            identityResult.CheckErrors(LocalizationManager);
     }
 }
-

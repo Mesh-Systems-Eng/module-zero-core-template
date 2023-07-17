@@ -1,13 +1,14 @@
-﻿namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+
+namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
 {
     public class InitialHostDbBuilder
     {
         private readonly AbpProjectNameDbContext _context;
 
-        public InitialHostDbBuilder(AbpProjectNameDbContext context)
-        {
+        public InitialHostDbBuilder(AbpProjectNameDbContext context) =>
             _context = context;
-        }
 
         public void Create()
         {

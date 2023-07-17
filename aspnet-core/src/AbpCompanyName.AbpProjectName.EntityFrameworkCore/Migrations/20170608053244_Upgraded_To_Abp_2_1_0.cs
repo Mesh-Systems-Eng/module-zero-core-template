@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿// <copyright file="20170608053244_Upgraded_To_Abp_2_1_0.cs" company="Mesh Systems LLC">
+// Copyright © 2023 Mesh Systems LLC.
+// </copyright>
+
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AbpCompanyName.AbpProjectName.Migrations
 {

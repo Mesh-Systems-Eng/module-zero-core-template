@@ -1,7 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Configuration.Startup;
 using AbpCompanyName.AbpProjectName.Sessions;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.Web.Views.Shared.Components.SideBarUserArea
 {

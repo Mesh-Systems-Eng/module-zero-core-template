@@ -1,4 +1,7 @@
-﻿using System;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.AspNetCore;
 using Abp.AspNetCore.TestBase;
 using Abp.Dependency;
@@ -15,41 +18,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace AbpCompanyName.AbpProjectName.Web.Tests
 {
+#pragma warning disable IDE0060 // Remove unused parameter
     public class Startup
     {
         private readonly IConfigurationRoot _appConfiguration;
 
-        public Startup(IWebHostEnvironment env)
-        {
+        public Startup(IWebHostEnvironment env) =>
             _appConfiguration = env.GetAppConfiguration();
-        }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
-        {
-            services.AddEntityFrameworkInMemoryDatabase();
-
-            services.AddMvc();
-            
-            IdentityRegistrar.Register(services);
-            AuthConfigurer.Configure(services, _appConfiguration);
-            
-            services.AddScoped<IWebResourceManager, WebResourceManager>();
-
-            //Configure Abp and Dependency Injection
-            return services.AddAbp<AbpProjectNameWebTestModule>(options =>
-            {
-                options.SetupTest();
-            });
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             UseInMemoryDb(app.ApplicationServices);
 
-            app.UseAbp(); //Initializes ABP framework.
+            app.UseAbp(); // Initializes ABP framework.
 
             app.UseExceptionHandler("/Error");
 
@@ -68,7 +53,25 @@ namespace AbpCompanyName.AbpProjectName.Web.Tests
             });
         }
 
-        private void UseInMemoryDb(IServiceProvider serviceProvider)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
+        {
+            services.AddEntityFrameworkInMemoryDatabase();
+
+            services.AddMvc();
+
+            IdentityRegistrar.Register(services);
+            AuthConfigurer.Configure(services, _appConfiguration);
+
+            services.AddScoped<IWebResourceManager, WebResourceManager>();
+
+            // Configure Abp and Dependency Injection
+            return services.AddAbp<AbpProjectNameWebTestModule>(options =>
+            {
+                options.SetupTest();
+            });
+        }
+
+        private static void UseInMemoryDb(IServiceProvider serviceProvider)
         {
             var builder = new DbContextOptionsBuilder<AbpProjectNameDbContext>();
             builder.UseInMemoryDatabase(Guid.NewGuid().ToString()).UseInternalServiceProvider(serviceProvider);
@@ -79,8 +82,7 @@ namespace AbpCompanyName.AbpProjectName.Web.Tests
                 .Register(
                     Component.For<DbContextOptions<AbpProjectNameDbContext>>()
                         .Instance(options)
-                        .LifestyleSingleton()
-                );
+                        .LifestyleSingleton());
         }
     }
 }

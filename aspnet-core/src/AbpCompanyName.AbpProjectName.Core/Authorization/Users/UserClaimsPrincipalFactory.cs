@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Authorization;
-using AbpCompanyName.AbpProjectName.Authorization.Roles;
 using Abp.Domain.Uow;
+using AbpCompanyName.AbpProjectName.Authorization.Roles;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace AbpCompanyName.AbpProjectName.Authorization.Users
 {

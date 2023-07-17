@@ -1,3 +1,7 @@
+#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Application.Features;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
@@ -11,18 +15,18 @@ namespace AbpCompanyName.AbpProjectName.Features
     public class FeatureValueStore : AbpFeatureValueStore<Tenant, User>
     {
         public FeatureValueStore(
-            ICacheManager cacheManager, 
-            IRepository<TenantFeatureSetting, long> tenantFeatureRepository, 
-            IRepository<Tenant> tenantRepository, 
-            IRepository<EditionFeatureSetting, long> editionFeatureRepository, 
-            IFeatureManager featureManager, 
-            IUnitOfWorkManager unitOfWorkManager) 
+            ICacheManager cacheManager,
+            IRepository<TenantFeatureSetting, long> tenantFeatureRepository,
+            IRepository<Tenant> tenantRepository,
+            IRepository<EditionFeatureSetting, long> editionFeatureRepository,
+            IFeatureManager featureManager,
+            IUnitOfWorkManager unitOfWorkManager)
             : base(
-                  cacheManager, 
-                  tenantFeatureRepository, 
-                  tenantRepository, 
-                  editionFeatureRepository, 
-                  featureManager, 
+                  cacheManager,
+                  tenantFeatureRepository,
+                  tenantRepository,
+                  editionFeatureRepository,
+                  featureManager,
                   unitOfWorkManager)
         {
         }

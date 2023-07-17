@@ -1,4 +1,7 @@
-﻿namespace AbpCompanyName.AbpProjectName.Debugging
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+
+namespace AbpCompanyName.AbpProjectName.Debugging
 {
     public static class DebugHelper
     {

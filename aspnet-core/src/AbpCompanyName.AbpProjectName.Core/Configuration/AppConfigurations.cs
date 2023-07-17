@@ -1,7 +1,11 @@
-﻿using System.Collections.Concurrent;
-using Microsoft.Extensions.Configuration;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Extensions;
 using Abp.Reflection.Extensions;
+using Microsoft.Extensions.Configuration;
+using System.Collections.Concurrent;
 
 namespace AbpCompanyName.AbpProjectName.Configuration
 {
@@ -9,18 +13,14 @@ namespace AbpCompanyName.AbpProjectName.Configuration
     {
         private static readonly ConcurrentDictionary<string, IConfigurationRoot> _configurationCache;
 
-        static AppConfigurations()
-        {
-            _configurationCache = new ConcurrentDictionary<string, IConfigurationRoot>();
-        }
+        static AppConfigurations() => _configurationCache = new ConcurrentDictionary<string, IConfigurationRoot>();
 
         public static IConfigurationRoot Get(string path, string environmentName = null, bool addUserSecrets = false)
         {
             var cacheKey = path + "#" + environmentName + "#" + addUserSecrets;
             return _configurationCache.GetOrAdd(
                 cacheKey,
-                _ => BuildConfiguration(path, environmentName, addUserSecrets)
-            );
+                _ => BuildConfiguration(path, environmentName, addUserSecrets));
         }
 
         private static IConfigurationRoot BuildConfiguration(string path, string environmentName = null, bool addUserSecrets = false)

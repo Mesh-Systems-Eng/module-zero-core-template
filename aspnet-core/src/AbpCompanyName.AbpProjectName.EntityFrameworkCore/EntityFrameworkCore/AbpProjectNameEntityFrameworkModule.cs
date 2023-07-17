@@ -1,4 +1,8 @@
-﻿using Abp.EntityFrameworkCore.Configuration;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
+using Abp.EntityFrameworkCore.Configuration;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Zero.EntityFrameworkCore;
@@ -7,11 +11,13 @@ using AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed;
 namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore
 {
     [DependsOn(
-        typeof(AbpProjectNameCoreModule), 
+        typeof(AbpProjectNameCoreModule),
         typeof(AbpZeroCoreEntityFrameworkCoreModule))]
     public class AbpProjectNameEntityFrameworkModule : AbpModule
     {
-        /* Used it tests to skip dbcontext registration, in order to use in-memory database of EF Core */
+        /// <summary>
+        /// Gets or sets a value indicating whether dbcontext registration should be skipped in order to use in-memory database of EF Core during testing.
+        /// </summary>
         public bool SkipDbContextRegistration { get; set; }
 
         public bool SkipDbSeed { get; set; }
@@ -34,10 +40,8 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore
             }
         }
 
-        public override void Initialize()
-        {
+        public override void Initialize() =>
             IocManager.RegisterAssemblyByConvention(typeof(AbpProjectNameEntityFrameworkModule).GetAssembly());
-        }
 
         public override void PostInitialize()
         {

@@ -1,5 +1,8 @@
-﻿using AutoMapper;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+
 using AbpCompanyName.AbpProjectName.Authorization.Users;
+using AutoMapper;
 
 namespace AbpCompanyName.AbpProjectName.Users.Dto
 {

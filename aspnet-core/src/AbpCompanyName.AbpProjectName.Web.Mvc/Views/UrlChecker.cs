@@ -1,24 +1,18 @@
-﻿using System.Text.RegularExpressions;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
+using System.Text.RegularExpressions;
 
 namespace AbpCompanyName.AbpProjectName.Web.Views
 {
-    public static class UrlChecker
+    public static partial class UrlChecker
     {
-        private static readonly Regex UrlWithProtocolRegex = new Regex("^.{1,10}://.*$");
+        public static bool IsRooted(string url) =>
+            url.StartsWith("/", System.StringComparison.OrdinalIgnoreCase)
+            || GeneratedUrlWithProtocolRegex().IsMatch(url);
 
-        public static bool IsRooted(string url)
-        {
-            if (url.StartsWith("/"))
-            {
-                return true;
-            }
-
-            if (UrlWithProtocolRegex.IsMatch(url))
-            {
-                return true;
-            }
-
-            return false;
-        }
+        [GeneratedRegex("^.{1,10}://.*$")]
+        private static partial Regex GeneratedUrlWithProtocolRegex();
     }
 }

@@ -1,7 +1,13 @@
-﻿using System;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
+#pragma warning disable CA2201 // Do not raise reserved exception types
+
+using Abp.Dependency;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Abp.Dependency;
 
 namespace AbpCompanyName.AbpProjectName.Authentication.External
 {
@@ -34,11 +40,8 @@ namespace AbpCompanyName.AbpProjectName.Authentication.External
 
         public IDisposableDependencyObjectWrapper<IExternalAuthProviderApi> CreateProviderApi(string provider)
         {
-            var providerInfo = _externalAuthConfiguration.Providers.FirstOrDefault(p => p.Name == provider);
-            if (providerInfo == null)
-            {
-                throw new Exception("Unknown external auth provider: " + provider);
-            }
+            var providerInfo = _externalAuthConfiguration.Providers.FirstOrDefault(p => p.Name == provider)
+                ?? throw new Exception($"Unknown external auth provider: {provider}");
 
             var providerApi = _iocResolver.ResolveAsDisposable<IExternalAuthProviderApi>(providerInfo.ProviderApiType);
             providerApi.Object.Initialize(providerInfo);

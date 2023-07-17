@@ -1,4 +1,8 @@
-﻿using AbpCompanyName.AbpProjectName.Debugging;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
+using AbpCompanyName.AbpProjectName.Debugging;
 
 namespace AbpCompanyName.AbpProjectName
 {
@@ -8,8 +12,7 @@ namespace AbpCompanyName.AbpProjectName
 
         public const string ConnectionStringName = "Default";
 
-        public const bool MultiTenancyEnabled = true;
-
+        public const bool MultiTenancyEnabled = false;
 
         /// <summary>
         /// Default pass phrase for SimpleStringCipher decrypt/encrypt operations

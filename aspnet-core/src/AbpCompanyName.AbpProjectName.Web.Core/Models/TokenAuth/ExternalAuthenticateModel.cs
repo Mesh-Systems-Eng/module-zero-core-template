@@ -1,5 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Authorization.Users;
+using System.ComponentModel.DataAnnotations;
 
 namespace AbpCompanyName.AbpProjectName.Models.TokenAuth
 {

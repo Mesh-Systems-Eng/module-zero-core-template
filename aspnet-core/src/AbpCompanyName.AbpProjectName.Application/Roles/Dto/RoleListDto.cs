@@ -1,6 +1,10 @@
-﻿using System;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Application.Services.Dto;
 using Abp.Domain.Entities.Auditing;
+using System;
 
 namespace AbpCompanyName.AbpProjectName.Roles.Dto
 {

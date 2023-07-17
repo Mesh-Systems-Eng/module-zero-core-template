@@ -1,8 +1,12 @@
-using System.Linq;
-using AutoMapper;
+#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Authorization;
 using Abp.Authorization.Roles;
 using AbpCompanyName.AbpProjectName.Authorization.Roles;
+using AutoMapper;
+using System.Linq;
 
 namespace AbpCompanyName.AbpProjectName.Roles.Dto
 {
@@ -18,7 +22,8 @@ namespace AbpCompanyName.AbpProjectName.Roles.Dto
 
             CreateMap<RoleDto, Role>();
 
-            CreateMap<Role, RoleDto>().ForMember(x => x.GrantedPermissions,
+            CreateMap<Role, RoleDto>().ForMember(
+                x => x.GrantedPermissions,
                 opt => opt.MapFrom(x => x.Permissions.Where(p => p.IsGranted)));
 
             CreateMap<Role, RoleListDto>();

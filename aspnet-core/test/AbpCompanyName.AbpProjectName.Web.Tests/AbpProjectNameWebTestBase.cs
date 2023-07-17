@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.AspNetCore.TestBase;
 using Abp.Authorization.Users;
 using Abp.Extensions;
@@ -20,6 +17,15 @@ using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shouldly;
+using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+
+#pragma warning disable CA2201 // Do not raise reserved exception types
 
 namespace AbpCompanyName.AbpProjectName.Web.Tests
 {
@@ -27,22 +33,22 @@ namespace AbpCompanyName.AbpProjectName.Web.Tests
     {
         protected static readonly Lazy<string> ContentRootFolder;
 
-        static AbpProjectNameWebTestBase()
-        {
-            ContentRootFolder = new Lazy<string>(WebContentDirectoryFinder.CalculateContentRootFolder, true);
-        }
-        
-        protected override IWebHostBuilder CreateWebHostBuilder()
-        {
-            return base
-                .CreateWebHostBuilder()
-                .UseContentRoot(ContentRootFolder.Value)
-                .UseSetting(WebHostDefaults.ApplicationKey, typeof(AbpProjectNameWebMvcModule).Assembly.FullName);
-        }
+        static AbpProjectNameWebTestBase() =>
+            ContentRootFolder = new Lazy<string>(WebContentFolderHelper.CalculateContentRootFolder, true);
 
-        #region Get response
+        // Html Parsing
+        protected static IHtmlDocument ParseHtml(string htmlString) => new HtmlParser().ParseDocument(htmlString);
 
-        protected async Task<T> GetResponseAsObjectAsync<T>(string url,
+        protected override IWebHostBuilder CreateWebHostBuilder() =>
+            base
+            .CreateWebHostBuilder()
+            .UseContentRoot(ContentRootFolder.Value)
+            .UseSetting(WebHostDefaults.ApplicationKey, typeof(AbpProjectNameWebMvcModule).Assembly.FullName);
+
+        // Get response
+
+        protected async Task<T> GetResponseAsObjectAsync<T>(
+            string url,
             HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {
             var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode);
@@ -52,14 +58,16 @@ namespace AbpCompanyName.AbpProjectName.Web.Tests
             });
         }
 
-        protected async Task<string> GetResponseAsStringAsync(string url,
+        protected async Task<string> GetResponseAsStringAsync(
+            string url,
             HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {
             var response = await GetResponseAsync(url, expectedStatusCode);
             return await response.Content.ReadAsStringAsync();
         }
 
-        protected async Task<HttpResponseMessage> GetResponseAsync(string url,
+        protected async Task<HttpResponseMessage> GetResponseAsync(
+            string url,
             HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {
             var response = await Client.GetAsync(url);
@@ -67,53 +75,46 @@ namespace AbpCompanyName.AbpProjectName.Web.Tests
             return response;
         }
 
-        #endregion
-        
-        #region Authenticate
-        
+        // Authenticate
+
         /// <summary>
         /// /api/TokenAuth/Authenticate
-        /// TokenAuthController
+        /// TokenAuthController.
         /// </summary>
-        /// <param name="tenancyName"></param>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <param name="tenancyName">Name of tenent.</param>
+        /// <param name="input">An <see cref="AuthenticateModel"/> instance.</param>
+        /// <returns>A <see cref="Task"/>.</returns>
         protected async Task AuthenticateAsync(string tenancyName, AuthenticateModel input)
         {
             if (tenancyName.IsNullOrWhiteSpace())
-            { 
+            {
                 var tenant = UsingDbContext(context => context.Tenants.FirstOrDefault(t => t.TenancyName == tenancyName));
                 if (tenant != null)
                 {
                     AbpSession.TenantId = tenant.Id;
-                    Client.DefaultRequestHeaders.Add("Abp.TenantId", tenant.Id.ToString());  //Set TenantId
+                    Client.DefaultRequestHeaders.Add("Abp.TenantId", $"{tenant.Id}"); // Set TenantId
                 }
             }
 
-            var response = await Client.PostAsync("/api/TokenAuth/Authenticate",
+            var response = await Client.PostAsync(
+                "/api/TokenAuth/Authenticate",
                 new StringContent(input.ToJsonString(), Encoding.UTF8, "application/json"));
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
             var result =
                 JsonConvert.DeserializeObject<AjaxResponse<AuthenticateResultModel>>(
                     await response.Content.ReadAsStringAsync());
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.Result.AccessToken);
-            
+
             AbpSession.UserId = result.Result.UserId;
         }
-        
-        #endregion
-        
-        #region Login
 
-        protected void LoginAsHostAdmin()
-        {
+        // Login
+
+        protected void LoginAsHostAdmin() =>
             LoginAsHost(AbpUserBase.AdminUserName);
-        }
 
-        protected void LoginAsDefaultTenantAdmin()
-        {
+        protected void LoginAsDefaultTenantAdmin() =>
             LoginAsTenant(AbpTenantBase.DefaultTenantName, AbpUserBase.AdminUserName);
-        }
 
         protected void LoginAsHost(string userName)
         {
@@ -122,41 +123,26 @@ namespace AbpCompanyName.AbpProjectName.Web.Tests
             var user =
                 UsingDbContext(
                     context =>
-                        context.Users.FirstOrDefault(u => u.TenantId == AbpSession.TenantId && u.UserName == userName));
-            if (user == null)
-            {
-                throw new Exception("There is no user: " + userName + " for host.");
-            }
-
+                        context.Users.FirstOrDefault(u => u.TenantId == AbpSession.TenantId && u.UserName == userName))
+                ?? throw new Exception("There is no user: " + userName + " for host.");
             AbpSession.UserId = user.Id;
         }
 
         protected void LoginAsTenant(string tenancyName, string userName)
         {
-            var tenant = UsingDbContext(context => context.Tenants.FirstOrDefault(t => t.TenancyName == tenancyName));
-            if (tenant == null)
-            {
-                throw new Exception("There is no tenant: " + tenancyName);
-            }
-
+            var tenant = UsingDbContext(context => context.Tenants.FirstOrDefault(t => t.TenancyName == tenancyName))
+                ?? throw new Exception("There is no tenant: " + tenancyName);
             AbpSession.TenantId = tenant.Id;
 
             var user =
                 UsingDbContext(
                     context =>
-                        context.Users.FirstOrDefault(u => u.TenantId == AbpSession.TenantId && u.UserName == userName));
-            if (user == null)
-            {
-                throw new Exception("There is no user: " + userName + " for tenant: " + tenancyName);
-            }
-
+                        context.Users.FirstOrDefault(u => u.TenantId == AbpSession.TenantId && u.UserName == userName))
+                ?? throw new Exception("There is no user: " + userName + " for tenant: " + tenancyName);
             AbpSession.UserId = user.Id;
         }
 
-        #endregion
-
-
-        #region UsingDbContext
+        // UsingDbContext
 
         protected void UsingDbContext(Action<AbpProjectNameDbContext> action)
         {
@@ -201,16 +187,5 @@ namespace AbpCompanyName.AbpProjectName.Web.Tests
 
             return result;
         }
-
-        #endregion
-
-        #region ParseHtml
-
-        protected IHtmlDocument ParseHtml(string htmlString)
-        {
-            return new HtmlParser().ParseDocument(htmlString);
-        }
-
-        #endregion
     }
 }

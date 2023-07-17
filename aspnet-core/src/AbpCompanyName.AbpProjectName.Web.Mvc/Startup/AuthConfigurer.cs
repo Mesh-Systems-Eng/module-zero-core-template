@@ -1,8 +1,12 @@
-﻿using System;
-using System.Text;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
 
 namespace AbpCompanyName.AbpProjectName.Web.Startup
 {
@@ -16,7 +20,6 @@ namespace AbpCompanyName.AbpProjectName.Web.Startup
                     .AddJwtBearer(options =>
                     {
                         options.Audience = configuration["Authentication:JwtBearer:Audience"];
-                        
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
                             // The signing key must match!
@@ -38,7 +41,6 @@ namespace AbpCompanyName.AbpProjectName.Web.Startup
                             ClockSkew = TimeSpan.Zero
                         };
                     });
-                
             }
         }
     }

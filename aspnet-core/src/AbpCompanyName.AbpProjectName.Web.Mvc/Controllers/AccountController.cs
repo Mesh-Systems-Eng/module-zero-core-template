@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.Authorization;
@@ -16,7 +12,6 @@ using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.MultiTenancy;
 using Abp.Notifications;
-using Abp.Runtime.Session;
 using Abp.Threading;
 using Abp.Timing;
 using Abp.UI;
@@ -30,6 +25,18 @@ using AbpCompanyName.AbpProjectName.MultiTenancy;
 using AbpCompanyName.AbpProjectName.Sessions;
 using AbpCompanyName.AbpProjectName.Web.Models.Account;
 using AbpCompanyName.AbpProjectName.Web.Views.Shared.Components.TenantChange;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+
+#pragma warning disable SA1202 // Elements should be ordered by access
+#pragma warning disable CA2201 // Do not raise reserved exception types
+#pragma warning disable CA1304 // Specify CultureInfo
 
 namespace AbpCompanyName.AbpProjectName.Web.Controllers
 {
@@ -73,8 +80,9 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
             _notificationPublisher = notificationPublisher;
         }
 
-        #region Login / Logout
+        // Login / Logout
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Keeping for clarity.")]
         public ActionResult Login(string userNameOrEmailAddress = "", string returnUrl = "", string successMessage = "")
         {
             if (string.IsNullOrWhiteSpace(returnUrl))
@@ -98,7 +106,7 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
             returnUrl = NormalizeReturnUrl(returnUrl);
             if (!string.IsNullOrWhiteSpace(returnUrlHash))
             {
-                returnUrl = returnUrl + returnUrlHash;
+                returnUrl += returnUrlHash;
             }
 
             var loginResult = await GetLoginResultAsync(loginModel.UsernameOrEmailAddress, loginModel.Password, GetTenancyNameOrNull());
@@ -115,6 +123,8 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
             return RedirectToAction("Login");
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0010:Add missing cases", Justification = "Only looking for specific cases.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "Keeping switch for clarity.")]
         private async Task<AbpLoginResult<Tenant, User>> GetLoginResultAsync(string usernameOrEmailAddress, string password, string tenancyName)
         {
             var loginResult = await _logInManager.LoginAsync(usernameOrEmailAddress, password, tenancyName);
@@ -128,14 +138,9 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
             }
         }
 
-        #endregion
+        // Register
 
-        #region Register
-
-        public ActionResult Register()
-        {
-            return RegisterView(new RegisterViewModel());
-        }
+        public ActionResult Register() => RegisterView(new RegisterViewModel());
 
         private ActionResult RegisterView(RegisterViewModel model)
         {
@@ -144,15 +149,8 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
             return View("Register", model);
         }
 
-        private bool IsSelfRegistrationEnabled()
-        {
-            if (!AbpSession.TenantId.HasValue)
-            {
-                return false; // No registration enabled for host users!
-            }
-
-            return true;
-        }
+        // False means No registration enabled for host users!
+        private bool IsSelfRegistrationEnabled() => AbpSession.TenantId.HasValue;
 
         [HttpPost]
         [UnitOfWork]
@@ -180,21 +178,21 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
                     }
                 }
 
+                // Assumed email address is always confirmed. Change this if you want to implement email confirmation.
                 var user = await _userRegistrationManager.RegisterAsync(
                     model.Name,
                     model.Surname,
                     model.EmailAddress,
                     model.UserName,
                     model.Password,
-                    true // Assumed email address is always confirmed. Change this if you want to implement email confirmation.
-                );
+                    isEmailConfirmed: true);
 
                 // Getting tenant-specific settings
                 var isEmailConfirmationRequiredForLogin = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin);
 
                 if (model.IsExternalLogin)
                 {
-                    Debug.Assert(externalLoginInfo != null);
+                    Debug.Assert(externalLoginInfo != null, "oginInfo != null");
 
                     if (string.Equals(externalLoginInfo.Principal.FindFirstValue(ClaimTypes.Email), model.EmailAddress, StringComparison.OrdinalIgnoreCase))
                     {
@@ -214,22 +212,16 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
 
                 await _unitOfWorkManager.Current.SaveChangesAsync();
 
-                Debug.Assert(user.TenantId != null);
+                Debug.Assert(user.TenantId != null, "user.TenantId != null");
 
                 var tenant = await _tenantManager.GetByIdAsync(user.TenantId.Value);
 
                 // Directly login if possible
                 if (user.IsActive && (user.IsEmailConfirmed || !isEmailConfirmationRequiredForLogin))
                 {
-                    AbpLoginResult<Tenant, User> loginResult;
-                    if (externalLoginInfo != null)
-                    {
-                        loginResult = await _logInManager.LoginAsync(externalLoginInfo, tenant.TenancyName);
-                    }
-                    else
-                    {
-                        loginResult = await GetLoginResultAsync(user.UserName, model.Password, tenant.TenancyName);
-                    }
+                    var loginResult = externalLoginInfo != null
+                        ? await _logInManager.LoginAsync(externalLoginInfo, tenant.TenancyName)
+                        : await GetLoginResultAsync(user.UserName, model.Password, tenant.TenancyName);
 
                     if (loginResult.Result == AbpLoginResultType.Success)
                     {
@@ -259,14 +251,21 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
             }
         }
 
-        #endregion
+        // Helpers
 
-        #region External Login
+        public ActionResult RedirectToAppHome() => RedirectToAction("Index", "Home");
 
+        public string GetAppHomeUrl() => Url.Action("Index", "About");
+
+        // External Login
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Keeping for clarity.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for method", Justification = "Keeping for clarity.")]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
+            /*
+
             var redirectUrl = Url.Action(
                 "ExternalLoginCallback",
                 "Account",
@@ -282,18 +281,22 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
                 //     Items = { { "LoginProvider", provider } },
                 //     RedirectUri = redirectUrl
                 // },
-                provider
-            );
+                provider);
+
+             */
+
+            return Challenge(provider);
         }
 
         [UnitOfWork]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0010:Add missing cases", Justification = "Only looking for specific cases.")]
         public virtual async Task<ActionResult> ExternalLoginCallback(string returnUrl, string remoteError = null)
         {
             returnUrl = NormalizeReturnUrl(returnUrl);
 
             if (remoteError != null)
             {
-                Logger.Error("Remote Error in ExternalLoginCallback: " + remoteError);
+                Logger.Error($"Remote Error in ExternalLoginCallback: {remoteError}");
                 throw new UserFriendlyException(L("CouldNotCompleteLoginOperation"));
             }
 
@@ -321,33 +324,27 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
                     throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(
                         loginResult.Result,
                         externalLoginInfo.Principal.FindFirstValue(ClaimTypes.Email) ?? externalLoginInfo.ProviderKey,
-                        tenancyName
-                    );
+                        tenancyName);
             }
         }
 
         private async Task<ActionResult> RegisterForExternalLogin(ExternalLoginInfo externalLoginInfo)
         {
             var email = externalLoginInfo.Principal.FindFirstValue(ClaimTypes.Email);
-            var nameinfo = ExternalLoginInfoHelper.GetNameAndSurnameFromClaims(externalLoginInfo.Principal.Claims.ToList());
+            var (name, surname) = ExternalLoginInfoHelper.GetNameAndSurnameFromClaims(externalLoginInfo.Principal.Claims.ToList());
 
             var viewModel = new RegisterViewModel
             {
                 EmailAddress = email,
-                Name = nameinfo.name,
-                Surname = nameinfo.surname,
+                Name = name,
+                Surname = surname,
                 IsExternalLogin = true,
                 ExternalLoginAuthSchema = externalLoginInfo.LoginProvider
             };
 
-            if (nameinfo.name != null &&
-                nameinfo.surname != null &&
-                email != null)
-            {
-                return await Register(viewModel);
-            }
-
-            return RegisterView(viewModel);
+            return name != null && surname != null && email != null
+                ? await Register(viewModel)
+                : RegisterView(viewModel);
         }
 
         [UnitOfWork]
@@ -365,23 +362,7 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
                 .ToList();
         }
 
-        #endregion
-
-        #region Helpers
-
-        public ActionResult RedirectToAppHome()
-        {
-            return RedirectToAction("Index", "Home");
-        }
-
-        public string GetAppHomeUrl()
-        {
-            return Url.Action("Index", "About");
-        }
-
-        #endregion
-
-        #region Change Tenant
+        // Change Tenant
 
         public async Task<ActionResult> TenantChangeModal()
         {
@@ -392,56 +373,21 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
             });
         }
 
-        #endregion
-
-        #region Common
-
-        private string GetTenancyNameOrNull()
-        {
-            if (!AbpSession.TenantId.HasValue)
-            {
-                return null;
-            }
-
-            return _tenantCache.GetOrNull(AbpSession.TenantId.Value)?.TenancyName;
-        }
-
-        private string NormalizeReturnUrl(string returnUrl, Func<string> defaultValueBuilder = null)
-        {
-            if (defaultValueBuilder == null)
-            {
-                defaultValueBuilder = GetAppHomeUrl;
-            }
-
-            if (returnUrl.IsNullOrEmpty())
-            {
-                return defaultValueBuilder();
-            }
-
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return returnUrl;
-            }
-
-            return defaultValueBuilder();
-        }
-
-        #endregion
-
-        #region Etc
+        // Etc
 
         /// <summary>
         /// This is a demo code to demonstrate sending notification to default tenant admin and host admin uers.
-        /// Don't use this code in production !!!
+        /// Don't use this code in production !!!.
         /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
+        /// <param name="message">Message to send; Default is empty.</param>
+        /// <returns>Returns a <see cref="Task"/> of type <see cref="ActionResult"/> containing the message sent.</returns>
+        [Obsolete("Don't use this code in production !!!.")]
         [AbpMvcAuthorize]
         public async Task<ActionResult> TestNotification(string message = "")
         {
             if (message.IsNullOrEmpty())
             {
-                message = "This is a test notification, created at " + Clock.Now;
+                message = $"This is a test notification, created at {Clock.Now}";
             }
 
             var defaultTenantAdmin = new UserIdentifier(1, 2);
@@ -451,12 +397,25 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
                     "App.SimpleMessage",
                     new MessageNotificationData(message),
                     severity: NotificationSeverity.Info,
-                    userIds: new[] { defaultTenantAdmin, hostAdmin }
-                 );
+                    userIds: new[] { defaultTenantAdmin, hostAdmin });
 
-            return Content("Sent notification: " + message);
+            return Content($"Sent notification: {message}");
         }
 
-        #endregion
+        // Common
+
+        private string GetTenancyNameOrNull() =>
+            !AbpSession.TenantId.HasValue
+            ? null
+            : _tenantCache.GetOrNull(AbpSession.TenantId.Value)?.TenancyName;
+
+        private string NormalizeReturnUrl(string returnUrl, Func<string> defaultValueBuilder = null)
+        {
+            defaultValueBuilder ??= GetAppHomeUrl;
+
+            return returnUrl.IsNullOrEmpty() || !Url.IsLocalUrl(returnUrl)
+                ? defaultValueBuilder()
+                : returnUrl;
+        }
     }
 }
