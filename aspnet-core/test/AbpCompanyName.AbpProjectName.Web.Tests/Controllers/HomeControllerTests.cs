@@ -5,7 +5,7 @@
 using AbpCompanyName.AbpProjectName.Authorization.Users;
 using AbpCompanyName.AbpProjectName.Models.TokenAuth;
 using AbpCompanyName.AbpProjectName.Web.Controllers;
-using Shouldly;
+using FluentAssertions;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -27,7 +27,7 @@ namespace AbpCompanyName.AbpProjectName.Web.Tests.Controllers
                 GetUrl<HomeController>(nameof(HomeController.Index)));
 
             // Assert
-            response.ShouldNotBeNullOrEmpty();
+            response.Should().NotBeNullOrEmpty();
         }
     }
 }
