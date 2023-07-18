@@ -72,6 +72,7 @@ StyleCopReport.xml
 *_i.c
 *_p.c
 *_h.h
+*_i.h
 *.ilk
 *.meta
 *.obj
@@ -130,6 +131,9 @@ $tf/
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
+
+# JustCode is a .NET coding add-in
+.JustCode
 
 # TeamCity is a build add-in
 _TeamCity*
@@ -237,6 +241,7 @@ ClientBin/
 *.jfm
 *.pfx
 *.publishsettings
+			 
 orleans.codegen.cs
 
 # Including strong name files can present a security risk
@@ -368,12 +373,19 @@ FodyWeavers.xsd
 **/*/build/outputs/
 **/*/docker/mvc/Mvc-Logs/
 
+# JetBrains Rider
+.idea/
+*.sln.iml
+
 # IDEs and editors
 obj/
 bin/
+
+aspnet-core/src/AbpCompanyName.AbpProjectName.Web.Mvc/secrets.json
+aspnet-core/src/AbpCompanyName.AbpProjectName.Web.Host/secrets.json
+aspnet-core/src/AbpCompanyName.AbpProjectName.Migrator/secrets.json
 aspnet-core/src/AbpCompanyName.AbpProjectName.Web.Host/App_Data/Logs/
 aspnet-core/src/AbpCompanyName.AbpProjectName.Web.Mvc/App_Data/Logs/
 aspnet-core/src/AbpCompanyName.AbpProjectName.Migrator/Logs/Logs.txt
 aspnet-core/build/outputs/
 aspnet-core/docker/mvc/Mvc-Logs/
-
