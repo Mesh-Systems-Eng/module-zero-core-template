@@ -1,4 +1,7 @@
-﻿using Xunit;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+
+using Xunit;
 
 namespace AbpCompanyName.AbpProjectName.Tests
 {

@@ -1,15 +1,19 @@
-﻿using System.Threading.Tasks;
-using Shouldly;
-using Xunit;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using AbpCompanyName.AbpProjectName.Sessions;
+using Shouldly;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace AbpCompanyName.AbpProjectName.Tests.Sessions
 {
-    public class SessionAppService_Tests : AbpProjectNameTestBase
+    public class SessionAppServiceTests : AbpProjectNameTestBase
     {
         private readonly ISessionAppService _sessionAppService;
 
-        public SessionAppService_Tests()
+        public SessionAppServiceTests()
         {
             _sessionAppService = Resolve<ISessionAppService>();
         }

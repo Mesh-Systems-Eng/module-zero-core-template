@@ -1,21 +1,23 @@
-﻿using System;
-using System.Transactions;
-using Microsoft.EntityFrameworkCore;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Dependency;
 using Abp.Domain.Uow;
 using Abp.EntityFrameworkCore.Uow;
 using Abp.MultiTenancy;
 using AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host;
 using AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Tenants;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Transactions;
 
 namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed
 {
     public static class SeedHelper
     {
-        public static void SeedHostDb(IIocResolver iocResolver)
-        {
+        public static void SeedHostDb(IIocResolver iocResolver) =>
             WithDbContext<AbpProjectNameDbContext>(iocResolver, SeedHostDb);
-        }
 
         public static void SeedHostDb(AbpProjectNameDbContext context)
         {

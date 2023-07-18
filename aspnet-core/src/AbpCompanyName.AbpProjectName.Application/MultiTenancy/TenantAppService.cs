@@ -1,5 +1,7 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
@@ -15,10 +17,12 @@ using AbpCompanyName.AbpProjectName.Authorization.Users;
 using AbpCompanyName.AbpProjectName.Editions;
 using AbpCompanyName.AbpProjectName.MultiTenancy.Dto;
 using Microsoft.AspNetCore.Identity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.MultiTenancy
 {
-    [AbpAuthorize(PermissionNames.Pages_Tenants)]
+    [AbpAuthorize(PermissionNames.PagesTenants)]
     public class TenantAppService : AsyncCrudAppService<Tenant, TenantDto, int, PagedTenantResultRequestDto, CreateTenantDto, TenantDto>, ITenantAppService
     {
         private readonly TenantManager _tenantManager;
@@ -91,12 +95,18 @@ namespace AbpCompanyName.AbpProjectName.MultiTenancy
             return MapToEntityDto(tenant);
         }
 
-        protected override IQueryable<Tenant> CreateFilteredQuery(PagedTenantResultRequestDto input)
+        public override async Task DeleteAsync(EntityDto<int> input)
         {
-            return Repository.GetAll()
-                .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.TenancyName.Contains(input.Keyword) || x.Name.Contains(input.Keyword))
-                .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive);
+            CheckDeletePermission();
+
+            var tenant = await _tenantManager.GetByIdAsync(input.Id);
+            await _tenantManager.DeleteAsync(tenant);
         }
+
+        protected override IQueryable<Tenant> CreateFilteredQuery(PagedTenantResultRequestDto input) =>
+            Repository.GetAll()
+            .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.TenancyName.Contains(input.Keyword) || x.Name.Contains(input.Keyword))
+            .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive);
 
         protected override void MapToEntity(TenantDto updateInput, Tenant entity)
         {
@@ -106,18 +116,7 @@ namespace AbpCompanyName.AbpProjectName.MultiTenancy
             entity.IsActive = updateInput.IsActive;
         }
 
-        public override async Task DeleteAsync(EntityDto<int> input)
-        {
-            CheckDeletePermission();
-
-            var tenant = await _tenantManager.GetByIdAsync(input.Id);
-            await _tenantManager.DeleteAsync(tenant);
-        }
-
-        private void CheckErrors(IdentityResult identityResult)
-        {
+        private void CheckErrors(IdentityResult identityResult) =>
             identityResult.CheckErrors(LocalizationManager);
-        }
     }
 }
-

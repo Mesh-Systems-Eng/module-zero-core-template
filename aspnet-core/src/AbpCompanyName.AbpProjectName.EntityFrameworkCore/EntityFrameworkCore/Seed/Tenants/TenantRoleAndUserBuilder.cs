@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
@@ -9,6 +9,10 @@ using Abp.MultiTenancy;
 using AbpCompanyName.AbpProjectName.Authorization;
 using AbpCompanyName.AbpProjectName.Authorization.Roles;
 using AbpCompanyName.AbpProjectName.Authorization.Users;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Linq;
 
 namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Tenants
 {
@@ -23,10 +27,8 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Tenants
             _tenantId = tenantId;
         }
 
-        public void Create()
-        {
+        public void Create() =>
             CreateRolesAndUsers();
-        }
 
         private void CreateRolesAndUsers()
         {
@@ -62,8 +64,7 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Tenants
                         Name = permission.Name,
                         IsGranted = true,
                         RoleId = adminRole.Id
-                    })
-                );
+                    }));
                 _context.SaveChanges();
             }
 
@@ -73,7 +74,7 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Tenants
             if (adminUser == null)
             {
                 adminUser = User.CreateTenantAdminUser(_tenantId, "admin@defaulttenant.com");
-                adminUser.Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(adminUser, "123qwe");
+                adminUser.Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(adminUser, User.DefaultPassword);
                 adminUser.IsEmailConfirmed = true;
                 adminUser.IsActive = true;
 

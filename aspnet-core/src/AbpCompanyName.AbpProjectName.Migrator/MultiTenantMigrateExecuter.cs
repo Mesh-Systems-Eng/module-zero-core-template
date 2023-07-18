@@ -1,6 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
+#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Data;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
@@ -11,6 +12,9 @@ using Abp.Runtime.Security;
 using AbpCompanyName.AbpProjectName.EntityFrameworkCore;
 using AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed;
 using AbpCompanyName.AbpProjectName.MultiTenancy;
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
 
 namespace AbpCompanyName.AbpProjectName.Migrator
 {
@@ -73,11 +77,11 @@ namespace AbpCompanyName.AbpProjectName.Migrator
             _log.Write("--------------------------------------------------------");
 
             var migratedDatabases = new HashSet<string>();
-            var tenants = _tenantRepository.GetAllList(t => t.ConnectionString != null && t.ConnectionString != "");
+            var tenants = _tenantRepository.GetAllList(t => !string.IsNullOrEmpty(t.ConnectionString));
             for (var i = 0; i < tenants.Count; i++)
             {
                 var tenant = tenants[i];
-                _log.Write(string.Format("Tenant database migration started... ({0} / {1})", (i + 1), tenants.Count));
+                _log.Write($"Tenant database migration started... ({i + 1} / {tenants.Count})");
                 _log.Write("Name              : " + tenant.Name);
                 _log.Write("TenancyName       : " + tenant.TenancyName);
                 _log.Write("Tenant Id         : " + tenant.Id);
@@ -103,7 +107,7 @@ namespace AbpCompanyName.AbpProjectName.Migrator
                     _log.Write("This database has already migrated before (you have more than one tenant in same database). Skipping it....");
                 }
 
-                _log.Write(string.Format("Tenant database migration completed. ({0} / {1})", (i + 1), tenants.Count));
+                _log.Write($"Tenant database migration completed. ({i + 1} / {tenants.Count})");
                 _log.Write("--------------------------------------------------------");
             }
 

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Configuration;
@@ -11,7 +10,11 @@ using Abp.Domain.Uow;
 using Abp.Organizations;
 using Abp.Runtime.Caching;
 using AbpCompanyName.AbpProjectName.Authorization.Roles;
-using Abp.Authorization.Roles;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
 
 namespace AbpCompanyName.AbpProjectName.Authorization.Users
 {
@@ -34,7 +37,7 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Users
           IRepository<OrganizationUnit, long> organizationUnitRepository,
           IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository,
           IOrganizationUnitSettings organizationUnitSettings,
-          ISettingManager settingManager, 
+          ISettingManager settingManager,
           IRepository<UserLogin, long> userLoginRepository)
           : base(
               roleManager,

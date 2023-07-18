@@ -1,9 +1,15 @@
-﻿using System;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.AspNetCore.Mvc.Controllers;
 using Abp.Web.Models;
 using Abp.Web.Mvc.Models;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using System;
+
+#pragma warning disable CA2201 // Do not raise reserved exception types
 
 namespace AbpCompanyName.AbpProjectName.Web.Controllers
 {
@@ -11,10 +17,8 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
     {
         private readonly IErrorInfoBuilder _errorInfoBuilder;
 
-        public ErrorController(IErrorInfoBuilder errorInfoBuilder)
-        {
+        public ErrorController(IErrorInfoBuilder errorInfoBuilder) =>
             _errorInfoBuilder = errorInfoBuilder;
-        }
 
         public ActionResult Index()
         {
@@ -28,9 +32,7 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
                 "Error",
                 new ErrorViewModel(
                     _errorInfoBuilder.BuildForException(exception),
-                    exception
-                )
-            );
+                    exception));
         }
     }
 }

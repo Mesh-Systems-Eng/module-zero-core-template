@@ -1,8 +1,12 @@
-using System.Threading.Tasks;
+#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Configuration;
 using Abp.Zero.Configuration;
 using AbpCompanyName.AbpProjectName.Authorization.Accounts.Dto;
 using AbpCompanyName.AbpProjectName.Authorization.Users;
+using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.Authorization.Accounts
 {
@@ -27,12 +31,9 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Accounts
                 return new IsTenantAvailableOutput(TenantAvailabilityState.NotFound);
             }
 
-            if (!tenant.IsActive)
-            {
-                return new IsTenantAvailableOutput(TenantAvailabilityState.InActive);
-            }
-
-            return new IsTenantAvailableOutput(TenantAvailabilityState.Available, tenant.Id);
+            return !tenant.IsActive
+                ? new IsTenantAvailableOutput(TenantAvailabilityState.InActive)
+                : new IsTenantAvailableOutput(TenantAvailabilityState.Available, tenant.Id);
         }
 
         public async Task<RegisterOutput> Register(RegisterInput input)
@@ -43,8 +44,7 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Accounts
                 input.EmailAddress,
                 input.UserName,
                 input.Password,
-                true // Assumed email address is always confirmed. Change this if you want to implement email confirmation.
-            );
+                true); // Assumed email address is always confirmed. Change this if you want to implement email confirmation.
 
             var isEmailConfirmationRequiredForLogin = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin);
 

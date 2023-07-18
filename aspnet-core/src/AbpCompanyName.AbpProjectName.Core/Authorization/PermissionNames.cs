@@ -1,12 +1,16 @@
-﻿namespace AbpCompanyName.AbpProjectName.Authorization
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
+namespace AbpCompanyName.AbpProjectName.Authorization
 {
     public static class PermissionNames
     {
-        public const string Pages_Tenants = "Pages.Tenants";
+        public const string PagesTenants = "Pages.Tenants";
 
-        public const string Pages_Users = "Pages.Users";
-        public const string Pages_Users_Activation = "Pages.Users.Activation";
+        public const string PagesUsers = "Pages.Users";
+        public const string PagesUsersActivation = "Pages.Users.Activation";
 
-        public const string Pages_Roles = "Pages.Roles";
+        public const string PagesRoles = "Pages.Roles";
     }
 }

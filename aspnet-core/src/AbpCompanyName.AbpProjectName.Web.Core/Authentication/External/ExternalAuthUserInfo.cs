@@ -1,4 +1,7 @@
-﻿namespace AbpCompanyName.AbpProjectName.Authentication.External
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+
+namespace AbpCompanyName.AbpProjectName.Authentication.External
 {
     public class ExternalAuthUserInfo
     {

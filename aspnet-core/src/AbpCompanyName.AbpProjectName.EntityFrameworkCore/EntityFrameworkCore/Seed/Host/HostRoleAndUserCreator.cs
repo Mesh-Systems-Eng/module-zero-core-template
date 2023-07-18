@@ -1,5 +1,7 @@
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
@@ -8,7 +10,9 @@ using AbpCompanyName.AbpProjectName.Authorization;
 using AbpCompanyName.AbpProjectName.Authorization.Roles;
 using AbpCompanyName.AbpProjectName.Authorization.Users;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System.Linq;
 
 namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
 {
@@ -16,15 +20,11 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
     {
         private readonly AbpProjectNameDbContext _context;
 
-        public HostRoleAndUserCreator(AbpProjectNameDbContext context)
-        {
+        public HostRoleAndUserCreator(AbpProjectNameDbContext context) =>
             _context = context;
-        }
 
-        public void Create()
-        {
+        public void Create() =>
             CreateHostRoleAndUsers();
-        }
 
         private void CreateHostRoleAndUsers()
         {
@@ -60,8 +60,8 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
                         Name = permission.Name,
                         IsGranted = true,
                         RoleId = adminRoleForHost.Id
-                    })
-                );
+                    }));
+
                 _context.SaveChanges();
             }
 
@@ -81,7 +81,7 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
                     IsActive = true
                 };
 
-                user.Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(user, "123qwe");
+                user.Password = new PasswordHasher<User>(new OptionsWrapper<PasswordHasherOptions>(new PasswordHasherOptions())).HashPassword(user, User.DefaultPassword);
                 user.SetNormalizedNames();
 
                 adminUserForHost = _context.Users.Add(user).Entity;

@@ -1,7 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
+#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using AbpCompanyName.AbpProjectName.Roles.Dto;
 using AbpCompanyName.AbpProjectName.Users.Dto;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AbpCompanyName.AbpProjectName.Web.Models.Users
 {

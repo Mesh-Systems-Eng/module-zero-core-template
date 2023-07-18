@@ -1,6 +1,12 @@
-﻿using System;
-using System.IO;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
+#pragma warning disable IDE0090 // Use 'new(...)'
+
 using Abp.Reflection.Extensions;
+using System;
+using System.IO;
 
 namespace AbpCompanyName.AbpProjectName
 {
@@ -15,12 +21,12 @@ namespace AbpCompanyName.AbpProjectName
         /// </summary>
         public const string Version = "8.0.0.0";
 
+        private static readonly Lazy<DateTime> _lazyReleaseDate = new Lazy<DateTime>(() => new FileInfo(typeof(AppVersionHelper).GetAssembly().Location).LastWriteTime);
+
         /// <summary>
         /// Gets release (last build) date of the application.
         /// It's shown in the web page.
         /// </summary>
-        public static DateTime ReleaseDate => LzyReleaseDate.Value;
-
-        private static readonly Lazy<DateTime> LzyReleaseDate = new Lazy<DateTime>(() => new FileInfo(typeof(AppVersionHelper).GetAssembly().Location).LastWriteTime);
+        public static DateTime ReleaseDate => _lazyReleaseDate.Value;
     }
 }

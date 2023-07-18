@@ -1,4 +1,7 @@
-﻿using Abp.MultiTenancy;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+
+using Abp.MultiTenancy;
 
 namespace AbpCompanyName.AbpProjectName.Web.Models.Account
 {

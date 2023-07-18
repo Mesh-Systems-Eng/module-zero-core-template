@@ -1,11 +1,15 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Castle.MicroKernel.Registration;
-using Castle.Windsor.MsDependencyInjection;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Dependency;
 using AbpCompanyName.AbpProjectName.EntityFrameworkCore;
 using AbpCompanyName.AbpProjectName.Identity;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor.MsDependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace AbpCompanyName.AbpProjectName.Tests.DependencyInjection
 {
@@ -28,8 +32,7 @@ namespace AbpCompanyName.AbpProjectName.Tests.DependencyInjection
                 Component
                     .For<DbContextOptions<AbpProjectNameDbContext>>()
                     .Instance(builder.Options)
-                    .LifestyleSingleton()
-            );
+                    .LifestyleSingleton());
         }
     }
 }

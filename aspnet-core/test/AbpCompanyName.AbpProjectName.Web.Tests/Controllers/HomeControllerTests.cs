@@ -1,12 +1,17 @@
-﻿using System.Threading.Tasks;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
+using AbpCompanyName.AbpProjectName.Authorization.Users;
 using AbpCompanyName.AbpProjectName.Models.TokenAuth;
 using AbpCompanyName.AbpProjectName.Web.Controllers;
 using Shouldly;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace AbpCompanyName.AbpProjectName.Web.Tests.Controllers
 {
-    public class HomeController_Tests: AbpProjectNameWebTestBase
+    public class HomeControllerTests : AbpProjectNameWebTestBase
     {
         [Fact]
         public async Task Index_Test()
@@ -14,15 +19,14 @@ namespace AbpCompanyName.AbpProjectName.Web.Tests.Controllers
             await AuthenticateAsync(null, new AuthenticateModel
             {
                 UserNameOrEmailAddress = "admin",
-                Password = "123qwe"
+                Password = User.DefaultPassword
             });
 
-            //Act
+            // Act
             var response = await GetResponseAsStringAsync(
-                GetUrl<HomeController>(nameof(HomeController.Index))
-            );
+                GetUrl<HomeController>(nameof(HomeController.Index)));
 
-            //Assert
+            // Assert
             response.ShouldNotBeNullOrEmpty();
         }
     }

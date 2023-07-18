@@ -1,8 +1,12 @@
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Application.Editions;
 using Abp.Application.Features;
 using AbpCompanyName.AbpProjectName.Editions;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
 {
@@ -10,15 +14,11 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
     {
         private readonly AbpProjectNameDbContext _context;
 
-        public DefaultEditionCreator(AbpProjectNameDbContext context)
-        {
+        public DefaultEditionCreator(AbpProjectNameDbContext context) =>
             _context = context;
-        }
 
-        public void Create()
-        {
+        public void Create() =>
             CreateEditions();
-        }
 
         private void CreateEditions()
         {
@@ -33,6 +33,7 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Initial framework.")]
         private void CreateFeatureIfNotExists(int editionId, string featureName, bool isEnabled)
         {
             if (_context.EditionFeatureSettings.IgnoreQueryFilters().Any(ef => ef.EditionId == editionId && ef.Name == featureName))

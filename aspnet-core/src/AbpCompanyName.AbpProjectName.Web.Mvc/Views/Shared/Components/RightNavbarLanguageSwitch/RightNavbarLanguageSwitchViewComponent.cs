@@ -1,6 +1,10 @@
-﻿using System.Linq;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Localization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace AbpCompanyName.AbpProjectName.Web.Views.Shared.Components.RightNavbarLanguageSwitch
 {

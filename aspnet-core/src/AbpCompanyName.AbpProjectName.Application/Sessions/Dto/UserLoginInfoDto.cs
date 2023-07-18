@@ -1,4 +1,7 @@
-﻿using Abp.Application.Services.Dto;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+
+using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using AbpCompanyName.AbpProjectName.Authorization.Users;
 

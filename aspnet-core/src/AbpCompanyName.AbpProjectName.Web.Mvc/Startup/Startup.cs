@@ -1,27 +1,29 @@
-﻿using System;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
+using Abp.AspNetCore;
+using Abp.AspNetCore.Mvc.Antiforgery;
+using Abp.AspNetCore.SignalR.Hubs;
+using Abp.Castle.Logging.Log4Net;
+using Abp.Dependency;
+using Abp.Json;
+using AbpCompanyName.AbpProjectName.Authentication.JwtBearer;
+using AbpCompanyName.AbpProjectName.Configuration;
+using AbpCompanyName.AbpProjectName.Identity;
+using AbpCompanyName.AbpProjectName.Web.Resources;
+using Castle.Facilities.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Castle.Facilities.Logging;
-using Abp.AspNetCore;
-using Abp.AspNetCore.Mvc.Antiforgery;
-using Abp.Castle.Logging.Log4Net;
-using AbpCompanyName.AbpProjectName.Authentication.JwtBearer;
-using AbpCompanyName.AbpProjectName.Configuration;
-using AbpCompanyName.AbpProjectName.Identity;
-using AbpCompanyName.AbpProjectName.Web.Resources;
-using Abp.AspNetCore.SignalR.Hubs;
-using Abp.Dependency;
-using Abp.Json;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.WebEncoders;
 using Newtonsoft.Json.Serialization;
-
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace AbpCompanyName.AbpProjectName.Web.Startup
 {
@@ -44,8 +46,7 @@ namespace AbpCompanyName.AbpProjectName.Web.Startup
                     {
                         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                         options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
-                    }
-                )
+                    })
                 .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson(options =>
                 {
@@ -62,24 +63,21 @@ namespace AbpCompanyName.AbpProjectName.Web.Startup
             {
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
             });
-            
+
             services.AddScoped<IWebResourceManager, WebResourceManager>();
 
             services.AddSignalR();
 
             // Configure Abp and Dependency Injection
+            // Configure Log4Net logging
             services.AddAbpWithoutCreatingServiceProvider<AbpProjectNameWebMvcModule>(
-                // Configure Log4Net logging
                 options => options.IocManager.IocContainer.AddFacility<LoggingFacility>(
-                    f => f.UseAbpLog4Net().WithConfig(
-                        _hostingEnvironment.IsDevelopment()
-                            ? "log4net.config"
-                            : "log4net.Production.config"
-                        )
-                )
-            );
+                    f => f.UseAbpLog4Net().WithConfig(_hostingEnvironment.IsDevelopment()
+                    ? "log4net.config"
+                    : "log4net.Production.config")));
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Initial framework.")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseAbp(); // Initializes ABP framework.

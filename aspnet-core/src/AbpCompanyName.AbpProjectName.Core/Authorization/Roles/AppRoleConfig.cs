@@ -1,4 +1,8 @@
-﻿using Abp.MultiTenancy;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
+using Abp.MultiTenancy;
 using Abp.Zero.Configuration;
 
 namespace AbpCompanyName.AbpProjectName.Authorization.Roles
@@ -12,18 +16,14 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Roles
             roleManagementConfig.StaticRoles.Add(
                 new StaticRoleDefinition(
                     StaticRoleNames.Host.Admin,
-                    MultiTenancySides.Host
-                )
-            );
+                    MultiTenancySides.Host));
 
             // Static tenant roles
 
             roleManagementConfig.StaticRoles.Add(
                 new StaticRoleDefinition(
                     StaticRoleNames.Tenants.Admin,
-                    MultiTenancySides.Tenant
-                )
-            );
+                    MultiTenancySides.Tenant));
         }
     }
 }

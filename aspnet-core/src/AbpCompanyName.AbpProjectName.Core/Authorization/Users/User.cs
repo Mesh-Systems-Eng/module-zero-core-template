@@ -1,7 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Authorization.Users;
 using Abp.Extensions;
+using System;
+using System.Collections.Generic;
 
 namespace AbpCompanyName.AbpProjectName.Authorization.Users
 {
@@ -9,10 +13,8 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Users
     {
         public const string DefaultPassword = "123qwe";
 
-        public static string CreateRandomPassword()
-        {
-            return Guid.NewGuid().ToString("N").Truncate(16);
-        }
+        public static string CreateRandomPassword() =>
+            Guid.NewGuid().ToString("N").Truncate(16);
 
         public static User CreateTenantAdminUser(int tenantId, string emailAddress)
         {

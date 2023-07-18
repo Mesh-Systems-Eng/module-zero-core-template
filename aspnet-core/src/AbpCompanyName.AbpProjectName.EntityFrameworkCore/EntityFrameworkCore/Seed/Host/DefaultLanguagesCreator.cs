@@ -1,16 +1,25 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Localization;
 using Abp.MultiTenancy;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
 {
     public class DefaultLanguagesCreator
     {
+        private readonly AbpProjectNameDbContext _context;
+
+        public DefaultLanguagesCreator(AbpProjectNameDbContext context) =>
+            _context = context;
+
         public static List<ApplicationLanguage> InitialLanguages => GetInitialLanguages();
 
-        private readonly AbpProjectNameDbContext _context;
+        public void Create() => CreateLanguages();
 
         private static List<ApplicationLanguage> GetInitialLanguages()
         {
@@ -31,16 +40,6 @@ namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
                 new ApplicationLanguage(tenantId, "nl", "Nederlands", "famfamfam-flags nl"),
                 new ApplicationLanguage(tenantId, "ja", "日本語", "famfamfam-flags jp")
             };
-        }
-
-        public DefaultLanguagesCreator(AbpProjectNameDbContext context)
-        {
-            _context = context;
-        }
-
-        public void Create()
-        {
-            CreateLanguages();
         }
 
         private void CreateLanguages()

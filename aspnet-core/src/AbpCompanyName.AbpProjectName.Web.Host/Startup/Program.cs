@@ -1,4 +1,8 @@
-﻿using Abp.AspNetCore.Dependency;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
+using Abp.AspNetCore.Dependency;
 using Abp.Dependency;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;

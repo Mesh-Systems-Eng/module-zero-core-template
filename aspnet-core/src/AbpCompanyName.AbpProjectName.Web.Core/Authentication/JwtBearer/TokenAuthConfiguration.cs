@@ -1,5 +1,9 @@
-﻿using System;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Microsoft.IdentityModel.Tokens;
+using System;
 
 namespace AbpCompanyName.AbpProjectName.Authentication.JwtBearer
 {

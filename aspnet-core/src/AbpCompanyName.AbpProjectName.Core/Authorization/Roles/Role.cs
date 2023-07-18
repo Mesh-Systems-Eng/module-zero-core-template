@@ -1,6 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
 using Abp.Authorization.Roles;
 using AbpCompanyName.AbpProjectName.Authorization.Users;
+using System.ComponentModel.DataAnnotations;
 
 namespace AbpCompanyName.AbpProjectName.Authorization.Roles
 {
@@ -23,6 +27,6 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Roles
         }
 
         [StringLength(MaxDescriptionLength)]
-        public string Description {get; set;}
+        public string Description { get; set; }
     }
 }

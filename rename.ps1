@@ -21,7 +21,7 @@ $dirType="DirectoryInfo"
 Write-Host 'Start copy folders...'
 $newRoot=$newCompanyName+"."+$newProjectName
 mkdir $newRoot
-Copy-Item -Recurse .\aspnet-core\ .\$newRoot\
+Copy-Item -Recurse -Force .\aspnet-core\ .\$newRoot\
 Copy-Item -Recurse .\vue\ .\$newRoot\
 Copy-Item .gitignore .\$newRoot\
 Copy-Item LICENSE .\$newRoot\
@@ -60,7 +60,7 @@ function Rename {
 	Ls $TargetFolder -Include $include -Recurse | Where { $_.GetType().Name -eq $fileType} | ForEach-Object{
 		$fileText = Get-Content $_ -Raw -Encoding UTF8
 		if($fileText.Length -gt 0 -and ($fileText.contains($PlaceHolderCompanyName) -or $fileText.contains($PlaceHolderProjectName))){
-			$fileText.Replace($PlaceHolderCompanyName,$NewCompanyName).Replace($PlaceHolderProjectName,$NewProjectName) | Set-Content $_ -Encoding UTF8
+			$fileText.Replace($PlaceHolderCompanyName,$NewCompanyName).Replace($PlaceHolderProjectName,$NewProjectName) | Set-Content $_ -NoNewline -Encoding UTF8
 			Write-Host 'file(change text) ' $_.FullName
 		}
 		If($_.Name.contains($PlaceHolderCompanyName) -or $_.Name.contains($PlaceHolderProjectName)){

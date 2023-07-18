@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿#pragma warning disable IDE0073
+// Copyright © 2016 ASP.NET Boilerplate
+// Contributions Copyright © 2023 Mesh Systems LLC
+
+using System.Collections.Generic;
 
 namespace AbpCompanyName.AbpProjectName.Configuration.Ui
 {
     public static class UiThemes
     {
-        public static List<UiThemeInfo> All { get; }
-
-        static UiThemes()
-        {
+        static UiThemes() =>
             All = new List<UiThemeInfo>
             {
                 new UiThemeInfo("Red", "red"),
@@ -31,6 +32,7 @@ namespace AbpCompanyName.AbpProjectName.Configuration.Ui
                 new UiThemeInfo("Blue Grey", "blue-grey"),
                 new UiThemeInfo("Black", "black")
             };
-        }
+
+        public static List<UiThemeInfo> All { get; }
     }
 }
