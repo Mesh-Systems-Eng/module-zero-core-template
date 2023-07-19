@@ -3,7 +3,7 @@
 // Contributions Copyright © 2023 Mesh Systems LLC
 
 using AbpCompanyName.AbpProjectName.Sessions;
-using Shouldly;
+using FluentAssertions;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -13,10 +13,8 @@ namespace AbpCompanyName.AbpProjectName.Tests.Sessions
     {
         private readonly ISessionAppService _sessionAppService;
 
-        public SessionAppServiceTests()
-        {
+        public SessionAppServiceTests() =>
             _sessionAppService = Resolve<ISessionAppService>();
-        }
 
         [MultiTenantFact]
         public async Task Should_Get_Current_User_When_Logged_In_As_Host()
@@ -29,11 +27,11 @@ namespace AbpCompanyName.AbpProjectName.Tests.Sessions
 
             // Assert
             var currentUser = await GetCurrentUserAsync();
-            output.User.ShouldNotBe(null);
-            output.User.Name.ShouldBe(currentUser.Name);
-            output.User.Surname.ShouldBe(currentUser.Surname);
+            output.User.Should().NotBeNull();
+            output.User.Name.Should().Be(currentUser.Name);
+            output.User.Surname.Should().Be(currentUser.Surname);
 
-            output.Tenant.ShouldBe(null);
+            output.Tenant.Should().BeNull();
         }
 
         [Fact]
@@ -46,11 +44,11 @@ namespace AbpCompanyName.AbpProjectName.Tests.Sessions
             var currentUser = await GetCurrentUserAsync();
             var currentTenant = await GetCurrentTenantAsync();
 
-            output.User.ShouldNotBe(null);
-            output.User.Name.ShouldBe(currentUser.Name);
+            output.User.Should().NotBeNull();
+            output.User.Name.Should().Be(currentUser.Name);
 
-            output.Tenant.ShouldNotBe(null);
-            output.Tenant.Name.ShouldBe(currentTenant.Name);
+            output.Tenant.Should().NotBeNull();
+            output.Tenant.Name.Should().Be(currentTenant.Name);
         }
     }
 }

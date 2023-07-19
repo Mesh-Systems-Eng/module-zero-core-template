@@ -5,8 +5,8 @@
 using AbpCompanyName.AbpProjectName.Authorization.Users;
 using AbpCompanyName.AbpProjectName.Users;
 using AbpCompanyName.AbpProjectName.Users.Dto;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Shouldly;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -16,10 +16,8 @@ namespace AbpCompanyName.AbpProjectName.Tests.Users
     {
         private readonly IUserAppService _userAppService;
 
-        public UserAppServiceTests()
-        {
+        public UserAppServiceTests() =>
             _userAppService = Resolve<IUserAppService>();
-        }
 
         [Fact]
         public async Task GetUsers_Test()
@@ -28,7 +26,7 @@ namespace AbpCompanyName.AbpProjectName.Tests.Users
             var output = await _userAppService.GetAllAsync(new PagedUserResultRequestDto { MaxResultCount = 20, SkipCount = 0 });
 
             // Assert
-            output.Items.Count.ShouldBeGreaterThan(0);
+            output.Items.Count.Should().BeGreaterThan(0);
         }
 
         [Fact]
@@ -49,7 +47,7 @@ namespace AbpCompanyName.AbpProjectName.Tests.Users
             await UsingDbContextAsync(async context =>
             {
                 var johnNashUser = await context.Users.FirstOrDefaultAsync(u => u.UserName == "john.nash");
-                johnNashUser.ShouldNotBeNull();
+                johnNashUser.Should().NotBeNull();
             });
         }
     }

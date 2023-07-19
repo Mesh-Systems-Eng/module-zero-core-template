@@ -13,10 +13,10 @@ using AbpCompanyName.AbpProjectName.Models.TokenAuth;
 using AbpCompanyName.AbpProjectName.Web.Startup;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Shouldly;
 using System;
 using System.Linq;
 using System.Net;
@@ -71,7 +71,7 @@ namespace AbpCompanyName.AbpProjectName.Web.Tests
             HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {
             var response = await Client.GetAsync(url);
-            response.StatusCode.ShouldBe(expectedStatusCode);
+            response.StatusCode.Should().Be(expectedStatusCode);
             return response;
         }
 
@@ -99,7 +99,7 @@ namespace AbpCompanyName.AbpProjectName.Web.Tests
             var response = await Client.PostAsync(
                 "/api/TokenAuth/Authenticate",
                 new StringContent(input.ToJsonString(), Encoding.UTF8, "application/json"));
-            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             var result =
                 JsonConvert.DeserializeObject<AjaxResponse<AuthenticateResultModel>>(
                     await response.Content.ReadAsStringAsync());
