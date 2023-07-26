@@ -11,6 +11,9 @@ $oldProjectName="AbpProjectName"
 # your project name
 $newProjectName="YourProjectName"
 
+# type of ui project - reactjs, angular, vue, mvc
+$uiType="mvc"
+
 # file type
 $fileType="FileInfo"
 
@@ -22,14 +25,23 @@ Write-Host 'Start copy folders...'
 $newRoot=$newCompanyName+"."+$newProjectName
 mkdir $newRoot
 Copy-Item -Recurse -Force .\aspnet-core\ .\$newRoot\
-Copy-Item -Recurse .\vue\ .\$newRoot\
+
+if ($uiType -ne "mvc")
+{
+	Copy-Item -Recurse .\$uiType\ .\$newRoot\
+}
+
 Copy-Item .gitignore .\$newRoot\
 Copy-Item LICENSE .\$newRoot\
 Copy-Item README.md .\$newRoot\
 
 # folders to deal with
 $slnFolder = (Get-Item -Path "./$newRoot/aspnet-core/" -Verbose).FullName
-$vueFolder = (Get-Item -Path "./$newRoot/vue/" -Verbose).FullName
+
+if ($uiType -ne "mvc")
+{
+	$uiFolder = (Get-Item -Path "./$newRoot/$uiType/" -Verbose).FullName
+}
 
 function Rename {
 	param (
@@ -77,5 +89,11 @@ function Rename {
 }
 
 Rename -TargetFolder $slnFolder -PlaceHolderCompanyName $oldCompanyName -PlaceHolderProjectName $oldProjectName -NewCompanyName $newCompanyName -NewProjectName $newProjectName
-Rename -TargetFolder $vueFolder -PlaceHolderCompanyName $oldCompanyName -PlaceHolderProjectName $oldProjectName -NewCompanyName $newCompanyName -NewProjectName $newProjectName
+
+if ($uiType -ne "mvc")
+{
+	Rename -TargetFolder $uiFolder -PlaceHolderCompanyName $oldCompanyName -PlaceHolderProjectName $oldProjectName -NewCompanyName $newCompanyName -NewProjectName $newProjectName
+	Remove-Item -Force -Recurse -Path ".\$newRoot\aspnet-core\src\$newRoot.Web.Mvc\*"
+	Remove-Item -Force -Recurse -Path ".\$newRoot\aspnet-core\src\$newRoot.Web.Mvc"
+} 
 
