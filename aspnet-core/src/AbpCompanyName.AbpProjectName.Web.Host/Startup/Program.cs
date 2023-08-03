@@ -11,6 +11,7 @@ namespace AbpCompanyName.AbpProjectName.Web.Host.Startup
 {
     public class Program
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for method", Justification = "Initial framework.")]
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();

@@ -12,6 +12,7 @@ namespace AbpCompanyName.AbpProjectName.Web.Views.Shared.Components.RightNavbarU
 
         public bool IsMultiTenancyEnabled { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convert to conditional expression", Justification = "Initial framework.")]
         public string GetShownLoginName()
         {
             var userName = LoginInformations.User.UserName;

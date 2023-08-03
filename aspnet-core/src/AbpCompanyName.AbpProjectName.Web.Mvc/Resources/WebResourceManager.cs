@@ -25,16 +25,19 @@ namespace AbpCompanyName.AbpProjectName.Web.Resources
             _scriptUrls = new List<string>();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for method", Justification = "Initial framework.")]
         public void AddScript(string url, bool addMinifiedOnProd = true)
         {
             _scriptUrls.AddIfNotContains(NormalizeUrl(url, "js"));
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for method", Justification = "Initial framework.")]
         public IReadOnlyList<string> GetScripts()
         {
             return _scriptUrls.ToImmutableList();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for method", Justification = "Initial framework.")]
         public HelperResult RenderScripts()
         {
             return new HelperResult(async writer =>
@@ -46,6 +49,7 @@ namespace AbpCompanyName.AbpProjectName.Web.Resources
             });
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convert to conditional expression", Justification = "Initial framework.")]
         private string NormalizeUrl(string url, string ext)
         {
             if (_environment.IsDevelopment())

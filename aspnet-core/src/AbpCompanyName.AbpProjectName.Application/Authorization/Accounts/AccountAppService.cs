@@ -17,12 +17,14 @@ namespace AbpCompanyName.AbpProjectName.Authorization.Accounts
 
         private readonly UserRegistrationManager _userRegistrationManager;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0021:Use expression body for constructor", Justification = "Initial framework")]
         public AccountAppService(
             UserRegistrationManager userRegistrationManager)
         {
             _userRegistrationManager = userRegistrationManager;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convert to conditional expression", Justification = "Initial framework.")]
         public async Task<IsTenantAvailableOutput> IsTenantAvailable(IsTenantAvailableInput input)
         {
             var tenant = await TenantManager.FindByTenancyNameAsync(input.TenancyName);

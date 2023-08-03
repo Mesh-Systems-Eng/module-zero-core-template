@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "sass": "^1.63.6"
+  },
+  "scripts": {
+    "compile:scss": "sass wwwroot/scss/style.scss wwwroot/css/style.css"
+  }
+}
