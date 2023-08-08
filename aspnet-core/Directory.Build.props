@@ -7,9 +7,10 @@
     <Version />
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'!='Release'">
+  <PropertyGroup>
     <CodeAnalysisTreatsWarningsAsErrors>true</CodeAnalysisTreatsWarningsAsErrors>
     <MSBuildTreatWarningsAsErrors>true</MSBuildTreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>

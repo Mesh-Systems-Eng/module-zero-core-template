@@ -3,6 +3,13 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#Environment files
+**/.env
+
+/reactapp
+
+#Production
+/build
 # User-specific files
 *.rsuser
 *.suo
@@ -34,6 +41,8 @@ bld/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
+.vscode/
+**/.vscode/   
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
@@ -241,7 +250,7 @@ ClientBin/
 *.jfm
 *.pfx
 *.publishsettings
-			 
+
 orleans.codegen.cs
 
 # Including strong name files can present a security risk
@@ -381,11 +390,11 @@ FodyWeavers.xsd
 obj/
 bin/
 
-aspnet-core/src/AbpCompanyName.AbpProjectName.Web.Mvc/secrets.json
-aspnet-core/src/AbpCompanyName.AbpProjectName.Web.Host/secrets.json
-aspnet-core/src/AbpCompanyName.AbpProjectName.Migrator/secrets.json
-aspnet-core/src/AbpCompanyName.AbpProjectName.Web.Host/App_Data/Logs/
-aspnet-core/src/AbpCompanyName.AbpProjectName.Web.Mvc/App_Data/Logs/
-aspnet-core/src/AbpCompanyName.AbpProjectName.Migrator/Logs/Logs.txt
+**/*.Web.Mvc/secrets.json
+**/*.Web.Host/secrets.json
+**/*.Migrator/secrets.json
+**/*.Web.Host/App_Data/Logs/
+**/*.Web.Mvc/App_Data/Logs/
+**/*.Migrator/Logs/Logs.txt
 aspnet-core/build/outputs/
 aspnet-core/docker/mvc/Mvc-Logs/
