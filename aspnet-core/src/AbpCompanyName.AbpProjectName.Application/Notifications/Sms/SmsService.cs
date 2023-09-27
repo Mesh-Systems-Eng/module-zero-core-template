@@ -2,6 +2,7 @@
 // Copyright © 2023 Mesh Systems LLC.
 // </copyright>
 
+using Abp.Application.Services;
 using AbpCompanyName.AbpProjectName.Configuration.Options;
 using AbpCompanyName.AbpProjectName.Configuration.Options.Notifications;
 using Mesh.Shared.Authorization;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.Notifications.Sms;
 
+[RemoteService(IsEnabled = false, IsMetadataEnabled = false)]
 public class SmsService : ISmsService
 {
     private const string AuthTokenCacheName = "SmsNotifications";
