@@ -2,6 +2,7 @@
 // Copyright © 2023 Mesh Systems LLC.
 // </copyright>
 
+using Abp.Application.Services;
 using AbpCompanyName.AbpProjectName.Configuration.Options;
 using AbpCompanyName.AbpProjectName.Configuration.Options.Notifications;
 using Mesh.Shared.Authorization;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.Notifications.Email;
 
+[RemoteService(IsEnabled = false, IsMetadataEnabled = false)]
 public class EmailService : IEmailService
 {
     private const string AuthTokenCacheName = "EmailNotifications";

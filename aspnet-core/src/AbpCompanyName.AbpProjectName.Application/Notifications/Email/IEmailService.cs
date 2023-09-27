@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.Notifications.Email;
 
+[RemoteService(IsEnabled = false, IsMetadataEnabled = false)]
 public interface IEmailService : IApplicationService
 {
     Task SendEmailAsync(EmailInput emailInput);

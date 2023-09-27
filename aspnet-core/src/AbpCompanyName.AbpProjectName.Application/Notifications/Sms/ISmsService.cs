@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.Notifications.Sms;
 
+[RemoteService(IsEnabled = false, IsMetadataEnabled = false)]
 public interface ISmsService : IApplicationService
 {
     Task SendTextAsync(SmsInput smsInput);
