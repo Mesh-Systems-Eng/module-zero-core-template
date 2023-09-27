@@ -10,6 +10,7 @@ using Abp.Dependency;
 using Abp.Json;
 using AbpCompanyName.AbpProjectName.Authentication.JwtBearer;
 using AbpCompanyName.AbpProjectName.Configuration;
+using AbpCompanyName.AbpProjectName.Configuration.Options;
 using AbpCompanyName.AbpProjectName.Identity;
 using AbpCompanyName.AbpProjectName.Web.Resources;
 using Castle.Facilities.Logging;
@@ -75,6 +76,11 @@ namespace AbpCompanyName.AbpProjectName.Web.Startup
                     f => f.UseAbpLog4Net().WithConfig(_hostingEnvironment.IsDevelopment()
                     ? "log4net.config"
                     : "log4net.Production.config")));
+
+            services
+                .RegisterSharedServicesConfiguration(_appConfiguration)
+                .RegisterEmailConfiguration(_appConfiguration)
+                .RegisterSmsConfiguration(_appConfiguration);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Initial framework.")]
