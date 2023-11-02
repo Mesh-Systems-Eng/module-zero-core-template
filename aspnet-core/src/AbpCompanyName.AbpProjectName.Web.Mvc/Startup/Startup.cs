@@ -41,6 +41,8 @@ namespace AbpCompanyName.AbpProjectName.Web.Startup
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureBackgroundWorkerTimer(_appConfiguration);
+
             // MVC
             services.AddControllersWithViews(
                     options =>
