@@ -10,6 +10,7 @@ using Abp.Dependency;
 using Abp.Extensions;
 using Abp.Json;
 using AbpCompanyName.AbpProjectName.Configuration;
+using AbpCompanyName.AbpProjectName.Configuration.Options;
 using AbpCompanyName.AbpProjectName.Identity;
 using Castle.Facilities.Logging;
 using Microsoft.AspNetCore.Builder;
@@ -45,6 +46,8 @@ namespace AbpCompanyName.AbpProjectName.Web.Host.Startup
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureBackgroundWorkerTimer(_appConfiguration);
+
             // MVC
             services.AddControllersWithViews(
                 options => { options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute()); })
