@@ -2,8 +2,6 @@
 // Copyright © 2016 ASP.NET Boilerplate
 // Contributions Copyright © 2023 Mesh Systems LLC
 
-using Abp;
-using Abp.AspNetCore.Mvc.Authorization;
 using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Configuration;
@@ -13,7 +11,6 @@ using Abp.Extensions;
 using Abp.MultiTenancy;
 using Abp.Notifications;
 using Abp.Threading;
-using Abp.Timing;
 using Abp.UI;
 using Abp.Web.Models;
 using Abp.Zero.Configuration;
@@ -371,35 +368,6 @@ namespace AbpCompanyName.AbpProjectName.Web.Controllers
             {
                 TenancyName = loginInfo.Tenant?.TenancyName
             });
-        }
-
-        // Etc
-
-        /// <summary>
-        /// This is a demo code to demonstrate sending notification to default tenant admin and host admin uers.
-        /// Don't use this code in production !!!.
-        /// </summary>
-        /// <param name="message">Message to send; Default is empty.</param>
-        /// <returns>Returns a <see cref="Task"/> of type <see cref="ActionResult"/> containing the message sent.</returns>
-        [Obsolete("Don't use this code in production !!!.")]
-        [AbpMvcAuthorize]
-        public async Task<ActionResult> TestNotification(string message = "")
-        {
-            if (message.IsNullOrEmpty())
-            {
-                message = $"This is a test notification, created at {Clock.Now}";
-            }
-
-            var defaultTenantAdmin = new UserIdentifier(1, 2);
-            var hostAdmin = new UserIdentifier(null, 1);
-
-            await _notificationPublisher.PublishAsync(
-                    "App.SimpleMessage",
-                    new MessageNotificationData(message),
-                    severity: NotificationSeverity.Info,
-                    userIds: new[] { defaultTenantAdmin, hostAdmin });
-
-            return Content($"Sent notification: {message}");
         }
 
         // Common

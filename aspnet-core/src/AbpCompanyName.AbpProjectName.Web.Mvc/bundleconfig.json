@@ -71,7 +71,8 @@
       "wwwroot/libs/sweetalert/sweetalert.min.js",
       "wwwroot/libs/toastr/toastr.min.js",
       "wwwroot/libs/moment/moment-with-locales.js",
-      "wwwroot/libs/signalr/dist/browser/signalr.js",
+
+      // "wwwroot/libs/signalr/dist/browser/signalr.js",
 
       "wwwroot/libs/abp-web-resources/Abp/Framework/scripts/abp.js",
       "wwwroot/libs/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js",
@@ -79,7 +80,7 @@
       "wwwroot/libs/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js",
       "wwwroot/libs/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js",
       "wwwroot/libs/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js",
-      "wwwroot/libs/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr-client.js",
+      // "wwwroot/libs/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr-client.js",
       
       "wwwroot/libs/jquery-validate/jquery.validate.js",
       "wwwroot/libs/jquery-validate/jquery.validate.unobtrusive.js",

@@ -62,7 +62,8 @@ namespace AbpCompanyName.AbpProjectName.Web.Host.Startup
             IdentityRegistrar.Register(services);
             AuthConfigurer.Configure(services, _appConfiguration);
 
-            services.AddSignalR();
+            // Uncomment to add SignalR hubs
+            // services.AddSignalR();
 
             // Configure CORS for angular2 UI
             // App:CorsOrigins in appsettings.json can contain more than one address separated by comma.
