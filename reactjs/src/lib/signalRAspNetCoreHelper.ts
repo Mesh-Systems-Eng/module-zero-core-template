@@ -1,22 +1,24 @@
-import AppConsts from './appconst';
-import Util from '../utils/utils';
+// Uncomment to use signalr
 
-declare var abp: any;
+// import AppConsts from './appconst';
+// import Util from '../utils/utils'; 
 
-class SignalRAspNetCoreHelper {
-  initSignalR() {
-    var encryptedAuthToken = abp.utils.getCookieValue(AppConsts.authorization.encrptedAuthTokenName);
+// declare var abp: any;
 
-    abp.signalr = {
-      autoConnect: true,
-      connect: undefined,
-      hubs: undefined,
-      qs: AppConsts.authorization.encrptedAuthTokenName + '=' + encodeURIComponent(encryptedAuthToken),
-      remoteServiceBaseUrl: AppConsts.remoteServiceBaseUrl,
-      url: '/signalr'
-    };
+// class SignalRAspNetCoreHelper {
+//   initSignalR() {
+//     var encryptedAuthToken = abp.utils.getCookieValue(AppConsts.authorization.encrptedAuthTokenName);
 
-    Util.loadScript(AppConsts.appBaseUrl + '/dist/abp.signalr-client.js');
-  }
-}
-export default new SignalRAspNetCoreHelper();
+//     abp.signalr = {
+//       autoConnect: true,
+//       connect: undefined,
+//       hubs: undefined,
+//       qs: AppConsts.authorization.encrptedAuthTokenName + '=' + encodeURIComponent(encryptedAuthToken),
+//       remoteServiceBaseUrl: AppConsts.remoteServiceBaseUrl,
+//       url: '/signalr'
+//     };
+
+//     Util.loadScript(AppConsts.appBaseUrl + '/dist/abp.signalr-client.js');
+//   }
+// }
+// export default new SignalRAspNetCoreHelper();

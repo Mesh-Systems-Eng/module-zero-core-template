@@ -69,7 +69,8 @@ namespace AbpCompanyName.AbpProjectName.Web.Startup
 
             services.AddScoped<IWebResourceManager, WebResourceManager>();
 
-            services.AddSignalR();
+            // Uncomment to add SignalR hubs
+            // services.AddSignalR();
 
             // Configure Abp and Dependency Injection
             // Configure Log4Net logging

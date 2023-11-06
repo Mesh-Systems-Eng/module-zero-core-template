@@ -44,19 +44,21 @@
       "library": "moment-timezone@0.5.23",
       "destination": "wwwroot/libs/moment-timezone"
     },
-    {
-      "library": "signalr.js@2.4.0",
-      "destination": "wwwroot/libs/signalr"
-    },
-    {
-      "library": "@aspnet/signalr@1.0.0",
-      "provider": "jsdelivr",
-      "destination": "wwwroot/libs/signalr",
-      "files": [
-        "dist/browser/signalr.js",
-        "dist/browser/signalr.js.map"
-      ]
-    },
+
+    // Uncomment to include signalr js client
+    // {
+    //   "library": "signalr.js@2.4.0",
+    //   "destination": "wwwroot/libs/signalr"
+    // },
+    // {
+    //   "library": "@aspnet/signalr@1.0.0",
+    //   "provider": "jsdelivr",
+    //   "destination": "wwwroot/libs/signalr",
+    //   "files": [
+    //     "dist/browser/signalr.js",
+    //     "dist/browser/signalr.js.map"
+    //   ]
+    // },
     //abp libs end
 
     //admin-lte libs start
