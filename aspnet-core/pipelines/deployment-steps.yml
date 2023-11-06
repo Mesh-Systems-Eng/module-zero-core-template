@@ -1,0 +1,11 @@
+parameters:
+- name: serviceConnection
+  type: string
+
+steps:
+  - task: AzureWebApp@1
+    displayName: 'Deploy Web App'
+    inputs:
+      azureSubscription: '${{ parameters.serviceConnection }}'
+      appName: $(bicepOutput.appServiceName)
+      package: '$(Pipeline.Workspace)/**/*.zip'

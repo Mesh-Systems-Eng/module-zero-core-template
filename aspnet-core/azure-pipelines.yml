@@ -1,0 +1,118 @@
+trigger:
+  branches:
+    include:
+      - develop
+      - release/*
+      - master
+
+parameters:
+  - name: deployInfrastructure
+    displayName: Deploy deployInfrastructure
+    default: true
+
+variables:
+  - template: pipelines/variables.yml
+
+resources:
+  repositories:
+   - repository: templates
+     type: git
+     name: Mesh One/Mesh.DevOps.Templates
+     ref: refs/tags/3.0.1
+
+stages:
+  - template: GenericTemplates/build-dotnet.yml@templates
+    parameters:
+      buildStageName: AbpCompanyName_UI_Service
+      executeTests: true
+      publishProjectsToPublish: ${{ variables.projectsToPublish }}
+      unitTestProjectsPath: ${{ variables.unitTestProjectsPath }}
+      preBuildSteps:
+        - template: /pipelines/build-frontend.yml
+          parameters:
+            BuildConfiguration: ${{ variables.BuildConfiguration }}
+            ProjectName: ${{ variables.ProjectName }}
+
+  - template: GenericTemplates/deploy.yml@templates
+    parameters:
+      stageName: Dv_deploy
+      stageDisplayName: Deploy to Dv
+      dependsOn: AbpCompanyName_UI_Service
+      deployEnvInfrastructure: ${{ parameters.deployInfrastructure }}
+      azureSubscriptionSvcCxn: ${{ variables.serviceConnection }}
+      conditionForDeployment: and(succeeded(), or(startsWith(variables['Build.SourceBranch'], 'refs/heads/develop'), startsWith(variables['Build.SourceBranch'], 'refs/heads/feat')))
+      clientAffix: ${{ variables.clientAffix }}
+      projectAffix: ${{ variables.projectAffix }}
+      componentAffix: ${{ variables.componentAffix }}
+      bicepTemplatePath: ${{ variables.bicepTemplatePath }}
+      additionalBicepParameters: |
+        sharedServicesClientId="$(SharedServicesClientId)" \
+        sharedServicesClientSecret="$(SharedServicesClientSecret)"
+      env: Dv
+      qualifyProjectAffix: ${{ eq(variables.qualifyProjectAffix, true) }}
+      variableGroup: ${{ format('{0}_{1}_{2}_{3}', variables.clientAffix, variables.projectAffix, variables.componentAffix, 'Dv') }}
+      vmImageLabel: 'ubuntu-latest'
+      deploymentSteps:
+        - template: /pipelines/deploy-ef-migrations.yml
+          parameters:
+            serviceConnection: ${{ variables.serviceConnection }}
+            DatabaseProject: ${{ variables.DatabaseProject }}
+        - template: /pipelines/deployment-steps.yml
+          parameters:
+            serviceConnection: ${{ variables.serviceConnection }}
+
+  - template: GenericTemplates/deploy.yml@templates
+    parameters:
+      stageName: Sg_deploy
+      stageDisplayName: Deploy to Sg
+      dependsOn: AbpCompanyName_UI_Service
+      deployEnvInfrastructure: ${{ parameters.deployInfrastructure }}
+      azureSubscriptionSvcCxn: ${{ variables.serviceConnection }}
+      conditionForDeployment: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))
+      clientAffix: ${{ variables.clientAffix }}
+      projectAffix: ${{ variables.projectAffix }}
+      componentAffix: ${{ variables.componentAffix }}
+      bicepTemplatePath: ${{ variables.bicepTemplatePath }}
+      additionalBicepParameters: |
+        sharedServicesClientId="$(SharedServicesClientId)" \
+        sharedServicesClientSecret="$(SharedServicesClientSecret)"
+      env: Sg
+      qualifyProjectAffix: ${{ eq(variables.qualifyProjectAffix, true) }}
+      variableGroup: ${{ format('{0}_{1}_{2}_{3}', variables.clientAffix, variables.projectAffix, variables.componentAffix, 'Sg') }}
+      vmImageLabel: 'ubuntu-latest'
+      deploymentSteps:
+        - template: /pipelines/deploy-ef-migrations.yml
+          parameters:
+            serviceConnection: ${{ variables.serviceConnection }}
+            DatabaseProject: ${{ variables.DatabaseProject }}
+        - template: /pipelines/deployment-steps.yml
+          parameters:
+            serviceConnection: ${{ variables.serviceConnection }}
+
+  - template: GenericTemplates/deploy.yml@templates
+    parameters:
+      stageName: Pd_deploy
+      stageDisplayName: Deploy to Pd
+      dependsOn: AbpCompanyName_UI_Service
+      deployEnvInfrastructure: ${{ parameters.deployInfrastructure }}
+      azureSubscriptionSvcCxn: ${{ variables.serviceConnection }}
+      conditionForDeployment: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/master'))
+      clientAffix: ${{ variables.clientAffix }}
+      projectAffix: ${{ variables.projectAffix }}
+      componentAffix: ${{ variables.componentAffix }}
+      bicepTemplatePath: ${{ variables.bicepTemplatePath }}
+      additionalBicepParameters: |
+        sharedServicesClientId="$(SharedServicesClientId)" \
+        sharedServicesClientSecret="$(SharedServicesClientSecret)"
+      env: Pd
+      qualifyProjectAffix: ${{ eq(variables.qualifyProjectAffix, true) }}
+      variableGroup: ${{ format('{0}_{1}_{2}_{3}', variables.clientAffix, variables.projectAffix, variables.componentAffix, 'Pd') }}
+      vmImageLabel: 'ubuntu-latest'
+      deploymentSteps:
+        - template: /pipelines/deploy-ef-migrations.yml
+          parameters:
+            serviceConnection: ${{ variables.serviceConnection }}
+            DatabaseProject: ${{ variables.DatabaseProject }}
+        - template: /pipelines/deployment-steps.yml
+          parameters:
+            serviceConnection: ${{ variables.serviceConnection }}

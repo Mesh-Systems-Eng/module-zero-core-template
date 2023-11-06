@@ -1,0 +1,22 @@
+parameters:
+  - name: ProjectName
+    type: string
+  - name: BuildConfiguration
+    type: string
+
+steps:
+  - checkout: self
+    fetchDepth: 0
+    clean: true
+  - task: NuGetAuthenticate@0
+    displayName: 'NuGet Authenticate'
+  - script: |
+      dotnet tool install -g Microsoft.Web.LibraryManager.Cli
+      libman restore
+    displayName: 'Restore Client-side Libraries'
+    workingDirectory: 'src/${{ parameters.ProjectName }}'
+  - script: |
+      npm install
+      npm run compile:scss
+    displayName: 'Install dependencies and compile SCSS'
+    workingDirectory: 'src/${{ parameters.ProjectName }}'

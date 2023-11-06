@@ -11,6 +11,8 @@ $oldProjectName="AbpProjectName"
 # your project name
 $newProjectName="YourProjectName"
 
+
+
 # type of ui project - reactjs, angular, vue, mvc
 $uiType="mvc"
 
@@ -97,3 +99,6 @@ if ($uiType -ne "mvc")
 	Remove-Item -Force -Recurse -Path ".\$newRoot\aspnet-core\src\$newRoot.Web.Mvc"
 } 
 
+cd $slnFolder
+ls
+#dotnet format --no-restore

@@ -1,0 +1,68 @@
+parameters:
+  - name: serviceConnection
+    type: string
+  - name: DatabaseProject
+    type: string
+
+steps:
+  - task: AzureCLI@2
+    displayName: Retrieve Connection String from Key Vault
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection }}
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        $connectionString = $(az keyVault secret show `
+                                --vault-name $(bicepOutput.keyVaultName) `
+                                --name ConnectionStrings--DbConnection | ConvertFrom-Json).value
+        Write-Host "Connection string -> $connectionString"
+        Write-Host "##vso[task.setvariable variable=connectionString]$connectionString"
+
+  - task: NuGetAuthenticate@0
+    displayName: 'NuGet Authenticate'
+
+  - task: UseDotNet@2
+    displayName: 'Use .NET Core sdk'
+    inputs:
+      packageType: 'sdk'
+      version: '7.0.x'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Install EF Core tools'
+    inputs:
+      command: 'custom'
+      custom: 'tool'
+      arguments: 'install --global dotnet-ef --version 7.0.3'
+
+  # TODO: Leaving in place for now but can likely remove
+  # - task: AzurePowerShell@5
+  #   displayName: 'Create SQL Firewall Exception'
+  #   inputs:
+  #     azureSubscription: ${{ parameters.serviceConnection }}
+  #     ScriptType: filePath
+  #     ScriptPath: '$(System.DefaultWorkingDirectory)/pipelines/scripts/addFirewallException.ps1'
+  #     ScriptArguments: '-ServerName $(bicepOutput.sqlServerName) -ResourceGroupName $(bicepOutput.resourceGroup)'
+  #     azurePowerShellVersion: LatestVersion
+
+  - task: AzureCLI@2
+    displayName: 'Run EF Migrations'
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection }}
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        dotnet-ef database update `
+          --project "src/${{ parameters.DatabaseProject }}/${{ parameters.DatabaseProject }}.csproj" `
+          --connection "$(connectionString)" `
+          --verbose
+
+  # TODO: Leaving in place for now but can likely remove
+  # - task: AzurePowerShell@5
+  #   displayName: 'Remove SQL Firewall Exception'
+  #   condition: always()
+  #   inputs:
+  #     azureSubscription: ${{ parameters.serviceConnection }}
+  #     ScriptType: filePath
+  #     ScriptPath: '$(System.DefaultWorkingDirectory)/pipelines/scripts/removeFirewallException.ps1'
+  #     ScriptArguments: '-ServerName $(bicepOutput.sqlServerName) -ResourceGroupName $(bicepOutput.resourceGroup)'
+  #     azurePowerShellVersion: LatestVersion
