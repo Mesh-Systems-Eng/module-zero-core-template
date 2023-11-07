@@ -1,6 +1,6 @@
 variables:
-  serviceConnection: 'ADD_SERVICE_CONNECTCION_NAME'
-  subscription: '8da788b8-c646-48a6-b1a4-5c32e4a9546f'
+  serviceConnection: 'ADD_SERVICE_CONNECTION_NAME'
+  subscription: 'ADD_AZURE_SUBSCRIPTION'
   clientAffix: CLIENT-AFFIX
   projectAffix: PROJECT-AFFIX
   componentAffix: ui

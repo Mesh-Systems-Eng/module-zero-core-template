@@ -1,16 +1,31 @@
-﻿# set output encoding
+﻿param(
+    [Parameter(Mandatory=$true)]
+    [ValidateScript({
+        if ([string]::IsNullOrEmpty($_)) {
+            throw "Company name cannot be null or empty. Example: Mesh"
+        }
+        return $true
+    })]
+    [string]$newCompanyName,
+
+    [Parameter(Mandatory=$true)]
+    [ValidateScript({
+        if ([string]::IsNullOrEmpty($_)) {
+            throw "Project name cannot be null or empty. Example: Vista"
+        }
+        return $true
+    })]
+    [string]$newProjectName
+)
+
+# set output encoding
 $OutputEncoding = [Text.UTF8Encoding]::UTF8
 
 # company name placeholder 
 $oldCompanyName="AbpCompanyName"
-# your company name
-$newCompanyName="YourCompanyName"
 
 # project name placeholder
 $oldProjectName="AbpProjectName"
-# your project name
-$newProjectName="YourProjectName"
-
 
 
 # type of ui project - reactjs, angular, vue, mvc
@@ -25,6 +40,12 @@ $dirType="DirectoryInfo"
 # copy 
 Write-Host 'Start copy folders...'
 $newRoot=$newCompanyName+"."+$newProjectName
+
+if (Test-Path $newRoot -PathType Container) {
+    Write-Host "Directory $newRoot exists. Change the parameters or remove or rename the directory."
+    exit
+}
+
 mkdir $newRoot
 Copy-Item -Recurse -Force .\aspnet-core\ .\$newRoot\
 
@@ -100,5 +121,4 @@ if ($uiType -ne "mvc")
 } 
 
 cd $slnFolder
-ls
-#dotnet format --no-restore
+dotnet format --no-restore
