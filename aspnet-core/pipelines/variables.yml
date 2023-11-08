@@ -1,0 +1,15 @@
+variables:
+  serviceConnection: 'ADD_SERVICE_CONNECTION_NAME'
+  subscription: 'ADD_AZURE_SUBSCRIPTION'
+  clientAffix: CLIENT-AFFIX
+  projectAffix: PROJECT-AFFIX
+  componentAffix: ui
+  bicepTemplatePath: './env/azuredeploy.bicep'
+  qualifyProjectAffix: true
+  Owner: 'ADD_OWNER_NAME'
+  repository: 'AbpCompanyName.AbpProjectName.UI'
+  ProjectName: AbpCompanyName.AbpProjectName.Web.Mvc'
+  DatabaseProject: 'AbpCompanyName.AbpProjectName.EntityFrameworkCore'
+  BuildConfiguration: 'Release'
+  projectsToPublish: "**/*/AbpCompanyName.AbpProjectName.Web.Mvc.csproj"
+  unitTestProjectsPath: "**/*/AbpCompanyName.AbpProjectName.Tests.csproj;**/*/AbpCompanyName.AbpProjectName.Web.Tests.csproj"
