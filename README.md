@@ -1,6 +1,8 @@
 # Important
 
-Issues of this repository are tracked on https://github.com/aspnetboilerplate/aspnetboilerplate. Please create your issues on https://github.com/aspnetboilerplate/aspnetboilerplate/issues.
+Issues of this forked repository's parent are tracked on https://github.com/aspnetboilerplate/aspnetboilerplate.
+
+**NOTE:** If there are issues, please reach out to the Mesh Team.
 
 # Introduction
 
@@ -15,6 +17,8 @@ User Interface is based on [AdminLTE theme](https://github.com/ColorlibHQ/AdminL
 
 # Mesh Specific Implementation
 Clone [Mesh's Fork of the Boilerplate Repository.](https://github.com/Mesh-Systems-Eng/module-zero-core-template)
+![](_screenshots/Clone_Example.png)
+
 
 #### From the root of the repo, execute the rename.ps1 file:
 ![](_screenshots/Rename_CommandLine.png)
@@ -50,13 +54,6 @@ Clone [Mesh's Fork of the Boilerplate Repository.](https://github.com/Mesh-Syste
 
 #### Entering the same params with a previous exiting directing with the same name will result the script ending:
 ![](_screenshots/Rename_CLI_Same_Params.png)
-
-
-
-
-
-# Download
-Create & download your project from https://aspnetboilerplate.com/Templates
 
 # Screenshots
 
