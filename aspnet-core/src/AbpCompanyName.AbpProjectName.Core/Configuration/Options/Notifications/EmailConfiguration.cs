@@ -9,7 +9,7 @@ namespace AbpCompanyName.AbpProjectName.Configuration.Options.Notifications;
 
 public class EmailConfiguration : IEmailSenderConfiguration, ISubscriptionConfiguration
 {
-    public HttpStatusCode[] SuccessfulStatusCodes { get; } = new HttpStatusCode[] { HttpStatusCode.Accepted, HttpStatusCode.OK };
+    public HttpStatusCode[] SuccessfulStatusCodes { get; } = [HttpStatusCode.Accepted, HttpStatusCode.OK];
 
     public string DefaultFromAddress { get; init; }
 

@@ -5,13 +5,8 @@ using Abp.Authorization;
 using AbpCompanyName.AbpProjectName.Authorization.Roles;
 using AbpCompanyName.AbpProjectName.Authorization.Users;
 
-namespace AbpCompanyName.AbpProjectName.Authorization
+namespace AbpCompanyName.AbpProjectName.Authorization;
+
+public class PermissionChecker(UserManager userManager) : PermissionChecker<Role, User>(userManager)
 {
-    public class PermissionChecker : PermissionChecker<Role, User>
-    {
-        public PermissionChecker(UserManager userManager)
-            : base(userManager)
-        {
-        }
-    }
 }

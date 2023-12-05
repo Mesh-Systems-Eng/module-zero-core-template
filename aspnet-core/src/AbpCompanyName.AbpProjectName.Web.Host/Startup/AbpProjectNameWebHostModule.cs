@@ -8,26 +8,16 @@ using AbpCompanyName.AbpProjectName.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
-namespace AbpCompanyName.AbpProjectName.Web.Host.Startup
+namespace AbpCompanyName.AbpProjectName.Web.Host.Startup;
+
+[System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Initial framework.")]
+[DependsOn(
+   typeof(AbpProjectNameWebCoreModule))]
+public class AbpProjectNameWebHostModule(IWebHostEnvironment env) : AbpModule
 {
-    [DependsOn(
-       typeof(AbpProjectNameWebCoreModule))]
-    public class AbpProjectNameWebHostModule : AbpModule
-    {
-#pragma warning disable IDE0052 // Remove unread private members
-        private readonly IWebHostEnvironment _env;
-        private readonly IConfigurationRoot _appConfiguration;
-#pragma warning restore IDE0052 // Remove unread private members
+    private readonly IWebHostEnvironment _env = env;
+    private readonly IConfigurationRoot _appConfiguration = env.GetAppConfiguration();
 
-        public AbpProjectNameWebHostModule(IWebHostEnvironment env)
-        {
-            _env = env;
-            _appConfiguration = env.GetAppConfiguration();
-        }
-
-        public override void Initialize()
-        {
-            IocManager.RegisterAssemblyByConvention(typeof(AbpProjectNameWebHostModule).GetAssembly());
-        }
-    }
+    public override void Initialize() =>
+        IocManager.RegisterAssemblyByConvention(typeof(AbpProjectNameWebHostModule).GetAssembly());
 }

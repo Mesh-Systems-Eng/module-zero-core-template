@@ -9,60 +9,59 @@ using Abp.Dependency;
 using Castle.Facilities.Logging;
 using System;
 
-namespace AbpCompanyName.AbpProjectName.Migrator
+namespace AbpCompanyName.AbpProjectName.Migrator;
+
+public class Program
 {
-    public class Program
+    private static bool QuietMode { get; set; }
+
+    public static void Main(string[] args)
     {
-        private static bool QuietMode { get; set; }
+        ParseArgs(args);
 
-        public static void Main(string[] args)
+        using (var bootstrapper = AbpBootstrapper.Create<AbpProjectNameMigratorModule>())
         {
-            ParseArgs(args);
+            bootstrapper.IocManager.IocContainer
+                .AddFacility<LoggingFacility>(
+                    f => f.UseAbpLog4Net().WithConfig("log4net.config"));
 
-            using (var bootstrapper = AbpBootstrapper.Create<AbpProjectNameMigratorModule>())
+            bootstrapper.Initialize();
+
+            using (var migrateExecuter = bootstrapper.IocManager.ResolveAsDisposable<MultiTenantMigrateExecuter>())
             {
-                bootstrapper.IocManager.IocContainer
-                    .AddFacility<LoggingFacility>(
-                        f => f.UseAbpLog4Net().WithConfig("log4net.config"));
+                var migrationSucceeded = migrateExecuter.Object.Run(QuietMode);
 
-                bootstrapper.Initialize();
-
-                using (var migrateExecuter = bootstrapper.IocManager.ResolveAsDisposable<MultiTenantMigrateExecuter>())
+                if (QuietMode)
                 {
-                    var migrationSucceeded = migrateExecuter.Object.Run(QuietMode);
-
-                    if (QuietMode)
-                    {
-                        // exit clean (with exit code 0) if migration is a success, otherwise exit with code 1
-                        var exitCode = Convert.ToInt32(!migrationSucceeded);
-                        Environment.Exit(exitCode);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Press ENTER to exit...");
-                        Console.ReadLine();
-                    }
+                    // exit clean (with exit code 0) if migration is a success, otherwise exit with code 1
+                    var exitCode = Convert.ToInt32(!migrationSucceeded);
+                    Environment.Exit(exitCode);
+                }
+                else
+                {
+                    Console.WriteLine("Press ENTER to exit...");
+                    Console.ReadLine();
                 }
             }
         }
+    }
 
-        private static void ParseArgs(string[] args)
+    private static void ParseArgs(string[] args)
+    {
+        if (args.IsNullOrEmpty())
         {
-            if (args.IsNullOrEmpty())
-            {
-                return;
-            }
+            return;
+        }
 
-            foreach (var arg in args)
+        foreach (var arg in args)
+        {
+            switch (arg)
             {
-                switch (arg)
-                {
-                    case "-q":
-                        QuietMode = true;
-                        break;
-                    default:
-                        break;
-                }
+                case "-q":
+                    QuietMode = true;
+                    break;
+                default:
+                    break;
             }
         }
     }

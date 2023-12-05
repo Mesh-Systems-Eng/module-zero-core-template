@@ -18,63 +18,50 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 
-namespace AbpCompanyName.AbpProjectName
+namespace AbpCompanyName.AbpProjectName;
+
+[DependsOn(
+    typeof(AbpProjectNameApplicationModule),
+    typeof(AbpProjectNameEntityFrameworkModule),
+    typeof(AbpAspNetCoreModule),
+    typeof(AbpAspNetCoreSignalRModule))
+    ]
+public class AbpProjectNameWebCoreModule(IWebHostEnvironment env) : AbpModule
 {
-    [DependsOn(
-        typeof(AbpProjectNameApplicationModule),
-        typeof(AbpProjectNameEntityFrameworkModule),
-        typeof(AbpAspNetCoreModule),
-        typeof(AbpAspNetCoreSignalRModule))
-        ]
-    public class AbpProjectNameWebCoreModule : AbpModule
+    private readonly IConfigurationRoot _appConfiguration = env.GetAppConfiguration();
+
+    public override void PreInitialize()
     {
-#pragma warning disable IDE0052 // Remove unread private members
-        private readonly IWebHostEnvironment _env;
-#pragma warning restore IDE0052 // Remove unread private members
-        private readonly IConfigurationRoot _appConfiguration;
+        Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
+            AbpProjectNameConsts.ConnectionStringName);
 
-        public AbpProjectNameWebCoreModule(IWebHostEnvironment env)
-        {
-            _env = env;
-            _appConfiguration = env.GetAppConfiguration();
-        }
+        // Use database for language management
+        Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
 
-        public override void PreInitialize()
-        {
-            Configuration.DefaultNameOrConnectionString = _appConfiguration.GetConnectionString(
-                AbpProjectNameConsts.ConnectionStringName);
+        Configuration.Modules.AbpAspNetCore()
+             .CreateControllersForAppServices(
+                 typeof(AbpProjectNameApplicationModule).GetAssembly());
 
-            // Use database for language management
-            Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
+        ConfigureTokenAuth();
+    }
 
-            Configuration.Modules.AbpAspNetCore()
-                 .CreateControllersForAppServices(
-                     typeof(AbpProjectNameApplicationModule).GetAssembly());
+    public override void Initialize() =>
+        IocManager.RegisterAssemblyByConvention(typeof(AbpProjectNameWebCoreModule)
+            .GetAssembly());
 
-            ConfigureTokenAuth();
-        }
+    public override void PostInitialize() =>
+        IocManager.Resolve<ApplicationPartManager>()
+        .AddApplicationPartsIfNotAddedBefore(typeof(AbpProjectNameWebCoreModule).Assembly);
 
-        public override void Initialize()
-        {
-            IocManager.RegisterAssemblyByConvention(typeof(AbpProjectNameWebCoreModule).GetAssembly());
-        }
+    private void ConfigureTokenAuth()
+    {
+        IocManager.Register<TokenAuthConfiguration>();
+        var tokenAuthConfig = IocManager.Resolve<TokenAuthConfiguration>();
 
-        public override void PostInitialize()
-        {
-            IocManager.Resolve<ApplicationPartManager>()
-                .AddApplicationPartsIfNotAddedBefore(typeof(AbpProjectNameWebCoreModule).Assembly);
-        }
-
-        private void ConfigureTokenAuth()
-        {
-            IocManager.Register<TokenAuthConfiguration>();
-            var tokenAuthConfig = IocManager.Resolve<TokenAuthConfiguration>();
-
-            tokenAuthConfig.SecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appConfiguration["Authentication:JwtBearer:SecurityKey"]));
-            tokenAuthConfig.Issuer = _appConfiguration["Authentication:JwtBearer:Issuer"];
-            tokenAuthConfig.Audience = _appConfiguration["Authentication:JwtBearer:Audience"];
-            tokenAuthConfig.SigningCredentials = new SigningCredentials(tokenAuthConfig.SecurityKey, SecurityAlgorithms.HmacSha256);
-            tokenAuthConfig.Expiration = TimeSpan.FromDays(1);
-        }
+        tokenAuthConfig.SecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appConfiguration["Authentication:JwtBearer:SecurityKey"]));
+        tokenAuthConfig.Issuer = _appConfiguration["Authentication:JwtBearer:Issuer"];
+        tokenAuthConfig.Audience = _appConfiguration["Authentication:JwtBearer:Audience"];
+        tokenAuthConfig.SigningCredentials = new SigningCredentials(tokenAuthConfig.SecurityKey, SecurityAlgorithms.HmacSha256);
+        tokenAuthConfig.Expiration = TimeSpan.FromDays(1);
     }
 }

@@ -10,25 +10,20 @@ using Abp.Runtime.Caching;
 using AbpCompanyName.AbpProjectName.Authorization.Users;
 using AbpCompanyName.AbpProjectName.MultiTenancy;
 
-namespace AbpCompanyName.AbpProjectName.Features
+namespace AbpCompanyName.AbpProjectName.Features;
+
+public class FeatureValueStore(
+    ICacheManager cacheManager,
+    IRepository<TenantFeatureSetting, long> tenantFeatureRepository,
+    IRepository<Tenant> tenantRepository,
+    IRepository<EditionFeatureSetting, long> editionFeatureRepository,
+    IFeatureManager featureManager,
+    IUnitOfWorkManager unitOfWorkManager) : AbpFeatureValueStore<Tenant, User>(
+          cacheManager,
+          tenantFeatureRepository,
+          tenantRepository,
+          editionFeatureRepository,
+          featureManager,
+          unitOfWorkManager)
 {
-    public class FeatureValueStore : AbpFeatureValueStore<Tenant, User>
-    {
-        public FeatureValueStore(
-            ICacheManager cacheManager,
-            IRepository<TenantFeatureSetting, long> tenantFeatureRepository,
-            IRepository<Tenant> tenantRepository,
-            IRepository<EditionFeatureSetting, long> editionFeatureRepository,
-            IFeatureManager featureManager,
-            IUnitOfWorkManager unitOfWorkManager)
-            : base(
-                  cacheManager,
-                  tenantFeatureRepository,
-                  tenantRepository,
-                  editionFeatureRepository,
-                  featureManager,
-                  unitOfWorkManager)
-        {
-        }
-    }
 }

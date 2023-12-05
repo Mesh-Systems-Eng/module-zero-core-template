@@ -8,21 +8,16 @@ using AbpCompanyName.AbpProjectName.Authorization.Roles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace AbpCompanyName.AbpProjectName.Authorization.Users
+namespace AbpCompanyName.AbpProjectName.Authorization.Users;
+
+public class UserClaimsPrincipalFactory(
+    UserManager userManager,
+    RoleManager roleManager,
+    IOptions<IdentityOptions> optionsAccessor,
+    IUnitOfWorkManager unitOfWorkManager) : AbpUserClaimsPrincipalFactory<User, Role>(
+          userManager,
+          roleManager,
+          optionsAccessor,
+          unitOfWorkManager)
 {
-    public class UserClaimsPrincipalFactory : AbpUserClaimsPrincipalFactory<User, Role>
-    {
-        public UserClaimsPrincipalFactory(
-            UserManager userManager,
-            RoleManager roleManager,
-            IOptions<IdentityOptions> optionsAccessor,
-            IUnitOfWorkManager unitOfWorkManager)
-            : base(
-                  userManager,
-                  roleManager,
-                  optionsAccessor,
-                  unitOfWorkManager)
-        {
-        }
-    }
 }

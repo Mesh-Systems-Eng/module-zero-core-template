@@ -9,25 +9,24 @@ using FluentAssertions;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace AbpCompanyName.AbpProjectName.Web.Tests.Controllers
+namespace AbpCompanyName.AbpProjectName.Web.Tests.Controllers;
+
+public class HomeControllerTests : AbpProjectNameWebTestBase
 {
-    public class HomeControllerTests : AbpProjectNameWebTestBase
+    [Fact]
+    public async Task Index_Test()
     {
-        [Fact]
-        public async Task Index_Test()
+        await AuthenticateAsync(null, new AuthenticateModel
         {
-            await AuthenticateAsync(null, new AuthenticateModel
-            {
-                UserNameOrEmailAddress = "admin",
-                Password = User.DefaultPassword
-            });
+            UserNameOrEmailAddress = "admin",
+            Password = User.DefaultPassword
+        });
 
-            // Act
-            var response = await GetResponseAsStringAsync(
-                GetUrl<HomeController>(nameof(HomeController.Index)));
+        // Act
+        var response = await GetResponseAsStringAsync(
+            GetUrl<HomeController>(nameof(HomeController.Index)));
 
-            // Assert
-            response.Should().NotBeNullOrEmpty();
-        }
+        // Assert
+        response.Should().NotBeNullOrEmpty();
     }
 }

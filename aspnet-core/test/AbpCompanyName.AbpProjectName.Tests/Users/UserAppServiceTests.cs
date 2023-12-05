@@ -10,45 +10,44 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace AbpCompanyName.AbpProjectName.Tests.Users
+namespace AbpCompanyName.AbpProjectName.Tests.Users;
+
+public class UserAppServiceTests : AbpProjectNameTestBase
 {
-    public class UserAppServiceTests : AbpProjectNameTestBase
+    private readonly IUserAppService _userAppService;
+
+    public UserAppServiceTests() =>
+        _userAppService = Resolve<IUserAppService>();
+
+    [Fact]
+    public async Task GetUsers_Test()
     {
-        private readonly IUserAppService _userAppService;
+        // Act
+        var output = await _userAppService.GetAllAsync(new PagedUserResultRequestDto { MaxResultCount = 20, SkipCount = 0 });
 
-        public UserAppServiceTests() =>
-            _userAppService = Resolve<IUserAppService>();
+        // Assert
+        output.Items.Count.Should().BeGreaterThan(0);
+    }
 
-        [Fact]
-        public async Task GetUsers_Test()
-        {
-            // Act
-            var output = await _userAppService.GetAllAsync(new PagedUserResultRequestDto { MaxResultCount = 20, SkipCount = 0 });
-
-            // Assert
-            output.Items.Count.Should().BeGreaterThan(0);
-        }
-
-        [Fact]
-        public async Task CreateUser_Test()
-        {
-            // Act
-            await _userAppService.CreateAsync(
-                new CreateUserDto
-                {
-                    EmailAddress = "john@volosoft.com",
-                    IsActive = true,
-                    Name = "John",
-                    Surname = "Nash",
-                    Password = User.DefaultPassword,
-                    UserName = "john.nash"
-                });
-
-            await UsingDbContextAsync(async context =>
+    [Fact]
+    public async Task CreateUser_Test()
+    {
+        // Act
+        await _userAppService.CreateAsync(
+            new CreateUserDto
             {
-                var johnNashUser = await context.Users.FirstOrDefaultAsync(u => u.UserName == "john.nash");
-                johnNashUser.Should().NotBeNull();
+                EmailAddress = "john@volosoft.com",
+                IsActive = true,
+                Name = "John",
+                Surname = "Nash",
+                Password = User.DefaultPassword,
+                UserName = "john.nash"
             });
-        }
+
+        await UsingDbContextAsync(async context =>
+        {
+            var johnNashUser = await context.Users.FirstOrDefaultAsync(u => u.UserName == "john.nash");
+            johnNashUser.Should().NotBeNull();
+        });
     }
 }

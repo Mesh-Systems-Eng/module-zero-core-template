@@ -12,7 +12,7 @@ namespace AbpCompanyName.AbpProjectName.Roles.Dto
     public class CreateRoleDto
     {
         public CreateRoleDto() =>
-            GrantedPermissions = new List<string>();
+            GrantedPermissions = [];
 
         [Required]
         [StringLength(AbpRoleBase.MaxNameLength)]

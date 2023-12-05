@@ -87,6 +87,7 @@ dotnet_diagnostic.IDE0090.severity = none
 
 dotnet_diagnostic.SA0001.severity = none
 dotnet_diagnostic.SA1009.severity = warning
+dotnet_diagnostic.SA1010.severity = none
 dotnet_diagnostic.SA1013.severity = warning
 dotnet_diagnostic.SA1028.severity = warning
 dotnet_diagnostic.SA1101.severity = none
@@ -102,6 +103,7 @@ dotnet_diagnostic.SA1512.severity = none
 dotnet_diagnostic.SA1513.severity = warning
 dotnet_diagnostic.SA1515.severity = none
 dotnet_diagnostic.SA1516.severity = none
+dotnet_diagnostic.SA1518.severity = none
 dotnet_diagnostic.SA1600.severity = none
 dotnet_diagnostic.SA1601.severity = none
 dotnet_diagnostic.SA1633.severity = none

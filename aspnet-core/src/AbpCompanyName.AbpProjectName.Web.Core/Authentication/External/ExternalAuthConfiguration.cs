@@ -5,15 +5,12 @@
 using Abp.Dependency;
 using System.Collections.Generic;
 
-namespace AbpCompanyName.AbpProjectName.Authentication.External
-{
-    public class ExternalAuthConfiguration : IExternalAuthConfiguration, ISingletonDependency
-    {
-        public ExternalAuthConfiguration()
-        {
-            Providers = new List<ExternalLoginProviderInfo>();
-        }
+namespace AbpCompanyName.AbpProjectName.Authentication.External;
 
-        public List<ExternalLoginProviderInfo> Providers { get; }
-    }
+public class ExternalAuthConfiguration : IExternalAuthConfiguration, ISingletonDependency
+{
+    public ExternalAuthConfiguration() =>
+        Providers = [];
+
+    public List<ExternalLoginProviderInfo> Providers { get; }
 }

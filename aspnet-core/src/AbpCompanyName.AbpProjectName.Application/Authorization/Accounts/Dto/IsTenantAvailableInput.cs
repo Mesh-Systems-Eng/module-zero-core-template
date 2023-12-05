@@ -5,12 +5,11 @@
 using Abp.MultiTenancy;
 using System.ComponentModel.DataAnnotations;
 
-namespace AbpCompanyName.AbpProjectName.Authorization.Accounts.Dto
+namespace AbpCompanyName.AbpProjectName.Authorization.Accounts.Dto;
+
+public class IsTenantAvailableInput
 {
-    public class IsTenantAvailableInput
-    {
-        [Required]
-        [StringLength(AbpTenantBase.MaxTenancyNameLength)]
-        public string TenancyName { get; set; }
-    }
+    [Required]
+    [StringLength(AbpTenantBase.MaxTenancyNameLength)]
+    public string TenancyName { get; set; }
 }

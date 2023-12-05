@@ -4,11 +4,10 @@
 
 using Abp.Application.Services.Dto;
 
-namespace AbpCompanyName.AbpProjectName.Users.Dto
+namespace AbpCompanyName.AbpProjectName.Users.Dto;
+
+public class PagedUserResultRequestDto : PagedResultRequestDto
 {
-    public class PagedUserResultRequestDto : PagedResultRequestDto
-    {
-        public string Keyword { get; set; }
-        public bool? IsActive { get; set; }
-    }
+    public string Keyword { get; set; }
+    public bool? IsActive { get; set; }
 }

@@ -2,17 +2,10 @@
 // Copyright © 2016 ASP.NET Boilerplate
 // Contributions Copyright © 2023 Mesh Systems LLC
 
-namespace AbpCompanyName.AbpProjectName.Configuration.Ui
-{
-    public class UiThemeInfo
-    {
-        public UiThemeInfo(string name, string cssClass)
-        {
-            Name = name;
-            CssClass = cssClass;
-        }
+namespace AbpCompanyName.AbpProjectName.Configuration.Ui;
 
-        public string Name { get; }
-        public string CssClass { get; }
-    }
+public class UiThemeInfo(string name, string cssClass)
+{
+    public string Name { get; } = name;
+    public string CssClass { get; } = cssClass;
 }

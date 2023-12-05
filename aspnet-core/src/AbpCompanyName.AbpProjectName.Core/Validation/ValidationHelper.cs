@@ -5,15 +5,14 @@
 using Abp.Extensions;
 using System.Text.RegularExpressions;
 
-namespace AbpCompanyName.AbpProjectName.Validation
+namespace AbpCompanyName.AbpProjectName.Validation;
+
+public static partial class ValidationHelper
 {
-    public static partial class ValidationHelper
-    {
-        public const string EmailRegex = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
+    public const string EmailRegex = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
 
-        public static bool IsEmail(string value) => !value.IsNullOrEmpty() && GeneratedEmailRegex().IsMatch(value);
+    public static bool IsEmail(string value) => !value.IsNullOrEmpty() && GeneratedEmailRegex().IsMatch(value);
 
-        [GeneratedRegex(EmailRegex)]
-        private static partial Regex GeneratedEmailRegex();
-    }
+    [GeneratedRegex(EmailRegex)]
+    private static partial Regex GeneratedEmailRegex();
 }

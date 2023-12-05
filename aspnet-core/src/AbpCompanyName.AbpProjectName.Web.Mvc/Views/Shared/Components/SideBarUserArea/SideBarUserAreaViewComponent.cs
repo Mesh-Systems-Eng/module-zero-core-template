@@ -9,18 +9,12 @@ using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.Web.Views.Shared.Components.SideBarUserArea
 {
-    public class SideBarUserAreaViewComponent : AbpProjectNameViewComponent
+    public class SideBarUserAreaViewComponent(
+        ISessionAppService sessionAppService,
+        IMultiTenancyConfig multiTenancyConfig) : AbpProjectNameViewComponent
     {
-        private readonly ISessionAppService _sessionAppService;
-        private readonly IMultiTenancyConfig _multiTenancyConfig;
-
-        public SideBarUserAreaViewComponent(
-            ISessionAppService sessionAppService,
-            IMultiTenancyConfig multiTenancyConfig)
-        {
-            _sessionAppService = sessionAppService;
-            _multiTenancyConfig = multiTenancyConfig;
-        }
+        private readonly ISessionAppService _sessionAppService = sessionAppService;
+        private readonly IMultiTenancyConfig _multiTenancyConfig = multiTenancyConfig;
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
