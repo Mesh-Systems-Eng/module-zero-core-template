@@ -4,17 +4,17 @@ This is a template to create **ASP.NET Core MVC / Angular** based startup projec
 
 1. [ASP.NET Core MVC & jQuery](https://aspnetboilerplate.com/Pages/Documents/Zero/Startup-Template-Core) (server rendered multi-page application).
 2. [ASP.NET Core & Angular](https://aspnetboilerplate.com/Pages/Documents/Zero/Startup-Template-Angular) (single page application).
- 
+
 User Interface is based on [AdminLTE theme](https://github.com/ColorlibHQ/AdminLTE).
 
 Mesh's Codebase has been forked and is available [here.](https://github.com/Mesh-Systems-Eng/module-zero-core-template)
 
-## The template has been updated to .NET 8.0 and Angular 17. It no longer supports React or Vue.
+## The template has been updated to .NET 8.0 and Angular 17 and is no longer supports React or Vue.
 
-### NOTE: Mesh's primary focus has been on the ASP.NET Core MVC version. It includes DevOps components that allow for rapid deployment when expected shared Azure resources are available. The previous Mesh version includes React and Vue templates based on an older version of the boilerplate. These versions are outdated and should be used with caution as several dependencies are outdated. The Angular version has been upgraded to the latest version of the framework however should be used with caution due to outdated dependencies.
+### NOTE: Mesh's primary focus has been on the ASP.NET Core MVC version. It includes DevOps components that allow for rapid deployment when expected shared Azure resources are available. The Angular version has been upgraded to the latest version of the framework however should be used with caution due to outdated dependencies. The previous Mesh version includes React and Vue templates based on an older version of the boilerplate. These versions are outdated and should be used with caution as several dependencies are outdated.
 
 # Mesh Running Locally
-#### Open the solution in Visual Studio. 
+#### Open the solution in Visual Studio.
 ![](docs/Open_In_VS.png)
 
 #### Edit the appsettings.json located in the /src/Company.Project.Web.Mvc project and update connection string to the appropriate SQL Server. The given credentials need entity creation DML. **(If there is no existing database, the given credentials need database creation DML.)**
@@ -38,8 +38,8 @@ Mesh's Codebase has been forked and is available [here.](https://github.com/Mesh
 #### Right-click on the libman.json file located in the Company.Project.Web.Mvc project and select _Restore Client-Side Libraries._
 ![](docs/Restore_ClientLibraries.png)
 
-## Running locally in Docker
-[Running with Docker](docs/how-to/docker/docker.md)
+## Docker
+[Running locally on Docker](docs/how-to/docker/docker.md)
 
 # Mesh DevOps
 
