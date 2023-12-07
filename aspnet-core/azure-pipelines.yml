@@ -25,6 +25,7 @@ stages:
     parameters:
       buildStageName: AbpCompanyName_UI_Service
       executeTests: true
+      dotnetVersion: '8.x'
       publishProjectsToPublish: ${{ variables.projectsToPublish }}
       unitTestProjectsPath: ${{ variables.unitTestProjectsPath }}
       preBuildSteps:
