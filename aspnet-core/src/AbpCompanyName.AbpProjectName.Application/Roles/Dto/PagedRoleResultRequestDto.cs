@@ -4,10 +4,9 @@
 
 using Abp.Application.Services.Dto;
 
-namespace AbpCompanyName.AbpProjectName.Roles.Dto
+namespace AbpCompanyName.AbpProjectName.Roles.Dto;
+
+public class PagedRoleResultRequestDto : PagedResultRequestDto
 {
-    public class PagedRoleResultRequestDto : PagedResultRequestDto
-    {
-        public string Keyword { get; set; }
-    }
+    public string Keyword { get; set; }
 }
