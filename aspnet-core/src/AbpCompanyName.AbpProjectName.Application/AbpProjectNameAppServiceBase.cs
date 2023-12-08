@@ -13,28 +13,27 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
 
-namespace AbpCompanyName.AbpProjectName
+namespace AbpCompanyName.AbpProjectName;
+
+/// <summary>
+/// Derive your application services from this class.
+/// </summary>
+public abstract class AbpProjectNameAppServiceBase : ApplicationService
 {
-    /// <summary>
-    /// Derive your application services from this class.
-    /// </summary>
-    public abstract class AbpProjectNameAppServiceBase : ApplicationService
-    {
-        protected AbpProjectNameAppServiceBase() =>
-            LocalizationSourceName = AbpProjectNameConsts.LocalizationSourceName;
+    protected AbpProjectNameAppServiceBase() =>
+        LocalizationSourceName = AbpProjectNameConsts.LocalizationSourceName;
 
-        public TenantManager TenantManager { get; set; }
+    public TenantManager TenantManager { get; set; }
 
-        public UserManager UserManager { get; set; }
+    public UserManager UserManager { get; set; }
 
-        protected virtual async Task<User> GetCurrentUserAsync() =>
-            await UserManager.FindByIdAsync($"{AbpSession.GetUserId()}")
-            ?? throw new Exception("There is no current user!");
+    protected virtual async Task<User> GetCurrentUserAsync() =>
+        await UserManager.FindByIdAsync($"{AbpSession.GetUserId()}")
+        ?? throw new Exception("There is no current user!");
 
-        protected virtual Task<Tenant> GetCurrentTenantAsync() =>
-            TenantManager.GetByIdAsync(AbpSession.GetTenantId());
+    protected virtual Task<Tenant> GetCurrentTenantAsync() =>
+        TenantManager.GetByIdAsync(AbpSession.GetTenantId());
 
-        protected virtual void CheckErrors(IdentityResult identityResult) =>
-            identityResult.CheckErrors(LocalizationManager);
-    }
+    protected virtual void CheckErrors(IdentityResult identityResult) =>
+        identityResult.CheckErrors(LocalizationManager);
 }

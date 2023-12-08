@@ -10,24 +10,18 @@ using AbpCompanyName.AbpProjectName.MultiTenancy;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace AbpCompanyName.AbpProjectName.Web.Controllers
+namespace AbpCompanyName.AbpProjectName.Web.Controllers;
+
+[AbpMvcAuthorize(PermissionNames.PagesTenants)]
+public class TenantsController(ITenantAppService tenantAppService) : AbpProjectNameControllerBase
 {
-    [AbpMvcAuthorize(PermissionNames.PagesTenants)]
-    public class TenantsController : AbpProjectNameControllerBase
+    private readonly ITenantAppService _tenantAppService = tenantAppService;
+
+    public ActionResult Index() => View();
+
+    public async Task<ActionResult> EditModal(int tenantId)
     {
-        private readonly ITenantAppService _tenantAppService;
-
-        public TenantsController(ITenantAppService tenantAppService)
-        {
-            _tenantAppService = tenantAppService;
-        }
-
-        public ActionResult Index() => View();
-
-        public async Task<ActionResult> EditModal(int tenantId)
-        {
-            var tenantDto = await _tenantAppService.GetAsync(new EntityDto(tenantId));
-            return PartialView("_EditModal", tenantDto);
-        }
+        var tenantDto = await _tenantAppService.GetAsync(new EntityDto(tenantId));
+        return PartialView("_EditModal", tenantDto);
     }
 }

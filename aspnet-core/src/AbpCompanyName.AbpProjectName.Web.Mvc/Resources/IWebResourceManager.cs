@@ -5,14 +5,13 @@
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Collections.Generic;
 
-namespace AbpCompanyName.AbpProjectName.Web.Resources
+namespace AbpCompanyName.AbpProjectName.Web.Resources;
+
+public interface IWebResourceManager
 {
-    public interface IWebResourceManager
-    {
-        void AddScript(string url, bool addMinifiedOnProd = true);
+    void AddScript(string url, bool addMinifiedOnProd = true);
 
-        IReadOnlyList<string> GetScripts();
+    IReadOnlyList<string> GetScripts();
 
-        HelperResult RenderScripts();
-    }
+    HelperResult RenderScripts();
 }

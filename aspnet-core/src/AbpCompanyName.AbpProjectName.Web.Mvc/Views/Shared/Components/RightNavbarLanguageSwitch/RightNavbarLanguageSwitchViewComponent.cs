@@ -8,14 +8,9 @@ using System.Linq;
 
 namespace AbpCompanyName.AbpProjectName.Web.Views.Shared.Components.RightNavbarLanguageSwitch
 {
-    public class RightNavbarLanguageSwitchViewComponent : AbpProjectNameViewComponent
+    public class RightNavbarLanguageSwitchViewComponent(ILanguageManager languageManager) : AbpProjectNameViewComponent
     {
-        private readonly ILanguageManager _languageManager;
-
-        public RightNavbarLanguageSwitchViewComponent(ILanguageManager languageManager)
-        {
-            _languageManager = languageManager;
-        }
+        private readonly ILanguageManager _languageManager = languageManager;
 
         public IViewComponentResult Invoke()
         {

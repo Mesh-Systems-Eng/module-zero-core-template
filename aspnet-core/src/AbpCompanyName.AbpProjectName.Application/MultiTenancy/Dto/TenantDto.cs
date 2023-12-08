@@ -7,20 +7,19 @@ using Abp.AutoMapper;
 using Abp.MultiTenancy;
 using System.ComponentModel.DataAnnotations;
 
-namespace AbpCompanyName.AbpProjectName.MultiTenancy.Dto
+namespace AbpCompanyName.AbpProjectName.MultiTenancy.Dto;
+
+[AutoMapFrom(typeof(Tenant))]
+public class TenantDto : EntityDto
 {
-    [AutoMapFrom(typeof(Tenant))]
-    public class TenantDto : EntityDto
-    {
-        [Required]
-        [StringLength(AbpTenantBase.MaxTenancyNameLength)]
-        [RegularExpression(AbpTenantBase.TenancyNameRegex)]
-        public string TenancyName { get; set; }
+    [Required]
+    [StringLength(AbpTenantBase.MaxTenancyNameLength)]
+    [RegularExpression(AbpTenantBase.TenancyNameRegex)]
+    public string TenancyName { get; set; }
 
-        [Required]
-        [StringLength(AbpTenantBase.MaxNameLength)]
-        public string Name { get; set; }
+    [Required]
+    [StringLength(AbpTenantBase.MaxNameLength)]
+    public string Name { get; set; }
 
-        public bool IsActive { get; set; }
-    }
+    public bool IsActive { get; set; }
 }

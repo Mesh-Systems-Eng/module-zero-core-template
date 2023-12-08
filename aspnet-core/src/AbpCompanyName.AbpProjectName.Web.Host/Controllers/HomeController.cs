@@ -5,10 +5,10 @@
 using AbpCompanyName.AbpProjectName.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AbpCompanyName.AbpProjectName.Web.Host.Controllers
+namespace AbpCompanyName.AbpProjectName.Web.Host.Controllers;
+
+public class HomeController : AbpProjectNameControllerBase
 {
-    public class HomeController : AbpProjectNameControllerBase
-    {
-        public IActionResult Index() => Redirect("/swagger");
-    }
+    public IActionResult Index() =>
+        Redirect("/swagger");
 }

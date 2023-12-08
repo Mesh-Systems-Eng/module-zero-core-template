@@ -12,54 +12,47 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace AbpCompanyName.AbpProjectName.Web.Resources
+namespace AbpCompanyName.AbpProjectName.Web.Resources;
+
+public class WebResourceManager(IWebHostEnvironment environment) : IWebResourceManager
 {
-    public class WebResourceManager : IWebResourceManager
+    private readonly IWebHostEnvironment _environment = environment;
+    private readonly List<string> _scriptUrls = [];
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for method", Justification = "Initial framework.")]
+    public void AddScript(string url, bool addMinifiedOnProd = true)
     {
-        private readonly IWebHostEnvironment _environment;
-        private readonly List<string> _scriptUrls;
+        _scriptUrls.AddIfNotContains(NormalizeUrl(url, "js"));
+    }
 
-        public WebResourceManager(IWebHostEnvironment environment)
-        {
-            _environment = environment;
-            _scriptUrls = new List<string>();
-        }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for method", Justification = "Initial framework.")]
+    public IReadOnlyList<string> GetScripts()
+    {
+        return _scriptUrls.ToImmutableList();
+    }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for method", Justification = "Initial framework.")]
-        public void AddScript(string url, bool addMinifiedOnProd = true)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for method", Justification = "Initial framework.")]
+    public HelperResult RenderScripts()
+    {
+        return new HelperResult(async writer =>
         {
-            _scriptUrls.AddIfNotContains(NormalizeUrl(url, "js"));
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for method", Justification = "Initial framework.")]
-        public IReadOnlyList<string> GetScripts()
-        {
-            return _scriptUrls.ToImmutableList();
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0022:Use expression body for method", Justification = "Initial framework.")]
-        public HelperResult RenderScripts()
-        {
-            return new HelperResult(async writer =>
+            foreach (var scriptUrl in _scriptUrls)
             {
-                foreach (var scriptUrl in _scriptUrls)
-                {
-                    await writer.WriteAsync($"<script src=\"{scriptUrl}?v={Clock.Now.Ticks}\"></script>");
-                }
-            });
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convert to conditional expression", Justification = "Initial framework.")]
-        private string NormalizeUrl(string url, string ext)
-        {
-            if (_environment.IsDevelopment())
-            {
-                return url;
+                await writer.WriteAsync($"<script src=\"{scriptUrl}?v={Clock.Now.Ticks}\"></script>");
             }
+        });
+    }
 
-            return url.EndsWith($".min.{ext}", StringComparison.OrdinalIgnoreCase)
-                ? url
-                : $"{url.Left(url.Length - ext.Length)}min.{ext}";
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0046:Convert to conditional expression", Justification = "Initial framework.")]
+    private string NormalizeUrl(string url, string ext)
+    {
+        if (_environment.IsDevelopment())
+        {
+            return url;
         }
+
+        return url.EndsWith($".min.{ext}", StringComparison.OrdinalIgnoreCase)
+            ? url
+            : $"{url.Left(url.Length - ext.Length)}min.{ext}";
     }
 }

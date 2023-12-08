@@ -9,14 +9,9 @@ using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.Web.Views.Shared.Components.AccountLanguages
 {
-    public class AccountLanguagesViewComponent : AbpProjectNameViewComponent
+    public class AccountLanguagesViewComponent(ILanguageManager languageManager) : AbpProjectNameViewComponent
     {
-        private readonly ILanguageManager _languageManager;
-
-        public AccountLanguagesViewComponent(ILanguageManager languageManager)
-        {
-            _languageManager = languageManager;
-        }
+        private readonly ILanguageManager _languageManager = languageManager;
 
         public Task<IViewComponentResult> InvokeAsync()
         {

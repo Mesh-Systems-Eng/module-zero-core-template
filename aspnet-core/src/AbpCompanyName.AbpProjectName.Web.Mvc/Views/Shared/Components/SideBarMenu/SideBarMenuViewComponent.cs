@@ -9,18 +9,12 @@ using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.Web.Views.Shared.Components.SideBarMenu
 {
-    public class SideBarMenuViewComponent : AbpProjectNameViewComponent
+    public class SideBarMenuViewComponent(
+        IUserNavigationManager userNavigationManager,
+        IAbpSession abpSession) : AbpProjectNameViewComponent
     {
-        private readonly IUserNavigationManager _userNavigationManager;
-        private readonly IAbpSession _abpSession;
-
-        public SideBarMenuViewComponent(
-            IUserNavigationManager userNavigationManager,
-            IAbpSession abpSession)
-        {
-            _userNavigationManager = userNavigationManager;
-            _abpSession = abpSession;
-        }
+        private readonly IUserNavigationManager _userNavigationManager = userNavigationManager;
+        private readonly IAbpSession _abpSession = abpSession;
 
         public async Task<IViewComponentResult> InvokeAsync()
         {

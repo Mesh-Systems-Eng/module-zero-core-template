@@ -20,69 +20,65 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace AbpCompanyName.AbpProjectName.Web.Tests
-{
+namespace AbpCompanyName.AbpProjectName.Web.Tests;
+
 #pragma warning disable IDE0060 // Remove unused parameter
-    public class Startup
+public class Startup(IWebHostEnvironment env)
+{
+    private readonly IConfigurationRoot _appConfiguration = env.GetAppConfiguration();
+
+    public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
-        private readonly IConfigurationRoot _appConfiguration;
+        UseInMemoryDb(app.ApplicationServices);
 
-        public Startup(IWebHostEnvironment env) =>
-            _appConfiguration = env.GetAppConfiguration();
+        app.UseAbp(); // Initializes ABP framework.
 
-        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        app.UseExceptionHandler("/Error");
+
+        app.UseStaticFiles();
+        app.UseRouting();
+
+        app.UseAuthentication();
+
+        app.UseJwtTokenMiddleware();
+
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints =>
         {
-            UseInMemoryDb(app.ApplicationServices);
+            endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+        });
+    }
 
-            app.UseAbp(); // Initializes ABP framework.
+    public IServiceProvider ConfigureServices(IServiceCollection services)
+    {
+        services.AddEntityFrameworkInMemoryDatabase();
 
-            app.UseExceptionHandler("/Error");
+        services.AddMvc();
 
-            app.UseStaticFiles();
-            app.UseRouting();
+        IdentityRegistrar.Register(services);
+        AuthConfigurer.Configure(services, _appConfiguration);
 
-            app.UseAuthentication();
+        services.AddScoped<IWebResourceManager, WebResourceManager>();
 
-            app.UseJwtTokenMiddleware();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-            });
-        }
-
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        // Configure Abp and Dependency Injection
+        return services.AddAbp<AbpProjectNameWebTestModule>(options =>
         {
-            services.AddEntityFrameworkInMemoryDatabase();
+            options.SetupTest();
+        });
+    }
 
-            services.AddMvc();
+    private static void UseInMemoryDb(IServiceProvider serviceProvider)
+    {
+        var builder = new DbContextOptionsBuilder<AbpProjectNameDbContext>();
+        builder.UseInMemoryDatabase(Guid.NewGuid().ToString()).UseInternalServiceProvider(serviceProvider);
+        var options = builder.Options;
 
-            IdentityRegistrar.Register(services);
-            AuthConfigurer.Configure(services, _appConfiguration);
-
-            services.AddScoped<IWebResourceManager, WebResourceManager>();
-
-            // Configure Abp and Dependency Injection
-            return services.AddAbp<AbpProjectNameWebTestModule>(options =>
-            {
-                options.SetupTest();
-            });
-        }
-
-        private static void UseInMemoryDb(IServiceProvider serviceProvider)
-        {
-            var builder = new DbContextOptionsBuilder<AbpProjectNameDbContext>();
-            builder.UseInMemoryDatabase(Guid.NewGuid().ToString()).UseInternalServiceProvider(serviceProvider);
-            var options = builder.Options;
-
-            var iocManager = serviceProvider.GetRequiredService<IIocManager>();
-            iocManager.IocContainer
-                .Register(
-                    Component.For<DbContextOptions<AbpProjectNameDbContext>>()
-                        .Instance(options)
-                        .LifestyleSingleton());
-        }
+        var iocManager = serviceProvider.GetRequiredService<IIocManager>();
+        iocManager.IocContainer
+            .Register(
+                Component.For<DbContextOptions<AbpProjectNameDbContext>>()
+                    .Instance(options)
+                    .LifestyleSingleton());
     }
 }

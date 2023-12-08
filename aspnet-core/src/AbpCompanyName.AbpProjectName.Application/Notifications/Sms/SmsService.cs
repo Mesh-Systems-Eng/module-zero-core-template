@@ -19,7 +19,7 @@ namespace AbpCompanyName.AbpProjectName.Notifications.Sms;
 public class SmsService : ISmsService
 {
     private const string AuthTokenCacheName = "SmsNotifications";
-    private static readonly HttpStatusCode[] _successfulStatusCodes = new HttpStatusCode[] { HttpStatusCode.Accepted, HttpStatusCode.OK };
+    private static readonly HttpStatusCode[] _successfulStatusCodes = [HttpStatusCode.Accepted, HttpStatusCode.OK];
     private readonly SmsConfiguration _smsConfiguration;
 
     public SmsService(IOptions<SmsConfiguration> smsConfiguration, IOptions<SharedServicesConfiguration> sharedServiceConfiguration)

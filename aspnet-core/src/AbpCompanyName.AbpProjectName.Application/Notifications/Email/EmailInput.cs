@@ -9,7 +9,7 @@ namespace AbpCompanyName.AbpProjectName.Notifications.Email;
 
 public class EmailInput
 {
-    public List<string> Addresses { get; set; } = new List<string>();
+    public List<string> Addresses { get; set; } = [];
 
     public string Subject { get; set; }
 
@@ -17,5 +17,5 @@ public class EmailInput
 
     public bool IsHtml { get; set; } = true;
 
-    public List<Attachment> Attachments { get; set; } = new List<Attachment>();
+    public List<Attachment> Attachments { get; set; } = [];
 }

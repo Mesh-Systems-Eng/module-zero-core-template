@@ -8,47 +8,46 @@ using Abp.Reflection.Extensions;
 using Abp.Zero.EntityFrameworkCore;
 using AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed;
 
-namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore
+namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore;
+
+[DependsOn(
+    typeof(AbpProjectNameCoreModule),
+    typeof(AbpZeroCoreEntityFrameworkCoreModule))]
+public class AbpProjectNameEntityFrameworkModule : AbpModule
 {
-    [DependsOn(
-        typeof(AbpProjectNameCoreModule),
-        typeof(AbpZeroCoreEntityFrameworkCoreModule))]
-    public class AbpProjectNameEntityFrameworkModule : AbpModule
+    /// <summary>
+    /// Gets or sets a value indicating whether dbcontext registration should be skipped in order to use in-memory database of EF Core during testing.
+    /// </summary>
+    public bool SkipDbContextRegistration { get; set; }
+
+    public bool SkipDbSeed { get; set; }
+
+    public override void PreInitialize()
     {
-        /// <summary>
-        /// Gets or sets a value indicating whether dbcontext registration should be skipped in order to use in-memory database of EF Core during testing.
-        /// </summary>
-        public bool SkipDbContextRegistration { get; set; }
-
-        public bool SkipDbSeed { get; set; }
-
-        public override void PreInitialize()
+        if (!SkipDbContextRegistration)
         {
-            if (!SkipDbContextRegistration)
+            Configuration.Modules.AbpEfCore().AddDbContext<AbpProjectNameDbContext>(options =>
             {
-                Configuration.Modules.AbpEfCore().AddDbContext<AbpProjectNameDbContext>(options =>
+                if (options.ExistingConnection != null)
                 {
-                    if (options.ExistingConnection != null)
-                    {
-                        AbpProjectNameDbContextConfigurer.Configure(options.DbContextOptions, options.ExistingConnection);
-                    }
-                    else
-                    {
-                        AbpProjectNameDbContextConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
-                    }
-                });
-            }
+                    AbpProjectNameDbContextConfigurer.Configure(options.DbContextOptions, options.ExistingConnection);
+                }
+                else
+                {
+                    AbpProjectNameDbContextConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
+                }
+            });
         }
+    }
 
-        public override void Initialize() =>
-            IocManager.RegisterAssemblyByConvention(typeof(AbpProjectNameEntityFrameworkModule).GetAssembly());
+    public override void Initialize() =>
+        IocManager.RegisterAssemblyByConvention(typeof(AbpProjectNameEntityFrameworkModule).GetAssembly());
 
-        public override void PostInitialize()
+    public override void PostInitialize()
+    {
+        if (!SkipDbSeed)
         {
-            if (!SkipDbSeed)
-            {
-                SeedHelper.SeedHostDb(IocManager);
-            }
+            SeedHelper.SeedHostDb(IocManager);
         }
     }
 }

@@ -4,24 +4,15 @@
 
 using System;
 
-namespace AbpCompanyName.AbpProjectName.Authentication.External
+namespace AbpCompanyName.AbpProjectName.Authentication.External;
+
+public class ExternalLoginProviderInfo(string name, string clientId, string clientSecret, Type providerApiType)
 {
-    public class ExternalLoginProviderInfo
-    {
-        public ExternalLoginProviderInfo(string name, string clientId, string clientSecret, Type providerApiType)
-        {
-            Name = name;
-            ClientId = clientId;
-            ClientSecret = clientSecret;
-            ProviderApiType = providerApiType;
-        }
+    public string Name { get; set; } = name;
 
-        public string Name { get; set; }
+    public string ClientId { get; set; } = clientId;
 
-        public string ClientId { get; set; }
+    public string ClientSecret { get; set; } = clientSecret;
 
-        public string ClientSecret { get; set; }
-
-        public Type ProviderApiType { get; set; }
-    }
+    public Type ProviderApiType { get; set; } = providerApiType;
 }

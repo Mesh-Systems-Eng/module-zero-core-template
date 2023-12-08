@@ -9,16 +9,10 @@ using System.Threading.Tasks;
 
 namespace AbpCompanyName.AbpProjectName.Web.Views.Shared.Components.TenantChange
 {
-    public class TenantChangeViewComponent : AbpProjectNameViewComponent
+    public class TenantChangeViewComponent(ISessionAppService sessionAppService, IObjectMapper objectMapper) : AbpProjectNameViewComponent
     {
-        private readonly ISessionAppService _sessionAppService;
-        private readonly IObjectMapper _objectMapper;
-
-        public TenantChangeViewComponent(ISessionAppService sessionAppService, IObjectMapper objectMapper)
-        {
-            _sessionAppService = sessionAppService;
-            _objectMapper = objectMapper;
-        }
+        private readonly ISessionAppService _sessionAppService = sessionAppService;
+        private readonly IObjectMapper _objectMapper = objectMapper;
 
         public async Task<IViewComponentResult> InvokeAsync()
         {

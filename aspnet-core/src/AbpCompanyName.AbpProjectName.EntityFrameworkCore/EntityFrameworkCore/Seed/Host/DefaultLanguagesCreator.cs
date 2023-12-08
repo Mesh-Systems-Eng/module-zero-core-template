@@ -8,57 +8,55 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host
+namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore.Seed.Host;
+
+public class DefaultLanguagesCreator(AbpProjectNameDbContext context)
 {
-    public class DefaultLanguagesCreator
+    private readonly AbpProjectNameDbContext _context = context;
+
+    public static List<ApplicationLanguage> InitialLanguages =>
+        GetInitialLanguages();
+
+    public void Create() =>
+        CreateLanguages();
+
+    private static List<ApplicationLanguage> GetInitialLanguages()
     {
-        private readonly AbpProjectNameDbContext _context;
+        var tenantId = AbpProjectNameConsts.MultiTenancyEnabled ? null : (int?)MultiTenancyConsts.DefaultTenantId;
+        return
+        [
+            new ApplicationLanguage(tenantId, "en", "English", "famfamfam-flags us"),
+            new ApplicationLanguage(tenantId, "ar", "العربية", "famfamfam-flags sa"),
+            new ApplicationLanguage(tenantId, "de", "German", "famfamfam-flags de"),
+            new ApplicationLanguage(tenantId, "it", "Italiano", "famfamfam-flags it"),
+            new ApplicationLanguage(tenantId, "fa", "فارسی", "famfamfam-flags ir"),
+            new ApplicationLanguage(tenantId, "fr", "Français", "famfamfam-flags fr"),
+            new ApplicationLanguage(tenantId, "pt-BR", "Português", "famfamfam-flags br"),
+            new ApplicationLanguage(tenantId, "tr", "Türkçe", "famfamfam-flags tr"),
+            new ApplicationLanguage(tenantId, "ru", "Русский", "famfamfam-flags ru"),
+            new ApplicationLanguage(tenantId, "zh-Hans", "简体中文", "famfamfam-flags cn"),
+            new ApplicationLanguage(tenantId, "es-MX", "Español México", "famfamfam-flags mx"),
+            new ApplicationLanguage(tenantId, "nl", "Nederlands", "famfamfam-flags nl"),
+            new ApplicationLanguage(tenantId, "ja", "日本語", "famfamfam-flags jp")
+        ];
+    }
 
-        public DefaultLanguagesCreator(AbpProjectNameDbContext context) =>
-            _context = context;
-
-        public static List<ApplicationLanguage> InitialLanguages => GetInitialLanguages();
-
-        public void Create() => CreateLanguages();
-
-        private static List<ApplicationLanguage> GetInitialLanguages()
+    private void CreateLanguages()
+    {
+        foreach (var language in InitialLanguages)
         {
-            var tenantId = AbpProjectNameConsts.MultiTenancyEnabled ? null : (int?)MultiTenancyConsts.DefaultTenantId;
-            return new List<ApplicationLanguage>
-            {
-                new ApplicationLanguage(tenantId, "en", "English", "famfamfam-flags us"),
-                new ApplicationLanguage(tenantId, "ar", "العربية", "famfamfam-flags sa"),
-                new ApplicationLanguage(tenantId, "de", "German", "famfamfam-flags de"),
-                new ApplicationLanguage(tenantId, "it", "Italiano", "famfamfam-flags it"),
-                new ApplicationLanguage(tenantId, "fa", "فارسی", "famfamfam-flags ir"),
-                new ApplicationLanguage(tenantId, "fr", "Français", "famfamfam-flags fr"),
-                new ApplicationLanguage(tenantId, "pt-BR", "Português", "famfamfam-flags br"),
-                new ApplicationLanguage(tenantId, "tr", "Türkçe", "famfamfam-flags tr"),
-                new ApplicationLanguage(tenantId, "ru", "Русский", "famfamfam-flags ru"),
-                new ApplicationLanguage(tenantId, "zh-Hans", "简体中文", "famfamfam-flags cn"),
-                new ApplicationLanguage(tenantId, "es-MX", "Español México", "famfamfam-flags mx"),
-                new ApplicationLanguage(tenantId, "nl", "Nederlands", "famfamfam-flags nl"),
-                new ApplicationLanguage(tenantId, "ja", "日本語", "famfamfam-flags jp")
-            };
+            AddLanguageIfNotExists(language);
+        }
+    }
+
+    private void AddLanguageIfNotExists(ApplicationLanguage language)
+    {
+        if (_context.Languages.IgnoreQueryFilters().Any(l => l.TenantId == language.TenantId && l.Name == language.Name))
+        {
+            return;
         }
 
-        private void CreateLanguages()
-        {
-            foreach (var language in InitialLanguages)
-            {
-                AddLanguageIfNotExists(language);
-            }
-        }
-
-        private void AddLanguageIfNotExists(ApplicationLanguage language)
-        {
-            if (_context.Languages.IgnoreQueryFilters().Any(l => l.TenantId == language.TenantId && l.Name == language.Name))
-            {
-                return;
-            }
-
-            _context.Languages.Add(language);
-            _context.SaveChanges();
-        }
+        _context.Languages.Add(language);
+        _context.SaveChanges();
     }
 }

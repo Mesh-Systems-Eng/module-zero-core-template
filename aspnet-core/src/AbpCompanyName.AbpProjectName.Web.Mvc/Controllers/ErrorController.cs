@@ -11,28 +11,24 @@ using System;
 
 #pragma warning disable CA2201 // Do not raise reserved exception types
 
-namespace AbpCompanyName.AbpProjectName.Web.Controllers
+namespace AbpCompanyName.AbpProjectName.Web.Controllers;
+
+public class ErrorController(IErrorInfoBuilder errorInfoBuilder) : AbpController
 {
-    public class ErrorController : AbpController
+    private readonly IErrorInfoBuilder _errorInfoBuilder = errorInfoBuilder;
+
+    public ActionResult Index()
     {
-        private readonly IErrorInfoBuilder _errorInfoBuilder;
+        var exHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();
 
-        public ErrorController(IErrorInfoBuilder errorInfoBuilder) =>
-            _errorInfoBuilder = errorInfoBuilder;
+        var exception = exHandlerFeature != null
+                            ? exHandlerFeature.Error
+                            : new Exception("Unhandled exception!");
 
-        public ActionResult Index()
-        {
-            var exHandlerFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();
-
-            var exception = exHandlerFeature != null
-                                ? exHandlerFeature.Error
-                                : new Exception("Unhandled exception!");
-
-            return View(
-                "Error",
-                new ErrorViewModel(
-                    _errorInfoBuilder.BuildForException(exception),
-                    exception));
-        }
+        return View(
+            "Error",
+            new ErrorViewModel(
+                _errorInfoBuilder.BuildForException(exception),
+                exception));
     }
 }

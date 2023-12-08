@@ -8,15 +8,8 @@ using AbpCompanyName.AbpProjectName.Authorization.Users;
 using AbpCompanyName.AbpProjectName.MultiTenancy;
 using Microsoft.EntityFrameworkCore;
 
-namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore
-{
-    public class AbpProjectNameDbContext : AbpZeroDbContext<Tenant, Role, User, AbpProjectNameDbContext>
-    {
-        /* Define a DbSet for each entity of the application */
+namespace AbpCompanyName.AbpProjectName.EntityFrameworkCore;
 
-        public AbpProjectNameDbContext(DbContextOptions<AbpProjectNameDbContext> options)
-            : base(options)
-        {
-        }
-    }
+public class AbpProjectNameDbContext(DbContextOptions<AbpProjectNameDbContext> options) : AbpZeroDbContext<Tenant, Role, User, AbpProjectNameDbContext>(options)
+{
 }
